@@ -19,6 +19,10 @@ class Server {
   public server: http.Server;
   public io: io.Server;
   constructor() {
+    if(settings.auth_key === undefined) {
+      console.log(chalk.red("[SERVER] No auth key found! Authentication with master server failed!"));
+      process.exit(0);
+    }
     this.express = express();
     this.express.use(cors({ origin: "*" }));
     this.express.use(morgan("dev"));
@@ -31,6 +35,10 @@ class Server {
     this.server.listen(settings.port, () =>
       console.log(chalk.cyan(`[SERVER] Started on port ${settings.port.toString()}`))
     );
+  };
+
+  authorizeWithBackend(){
+    
   }
 }
 

@@ -6,6 +6,7 @@ interface ISettings {
   use_internal_db: boolean;
   database_url: string | null;
   is_whitelisted: boolean;
+  auth_key: string | undefined;
 }
 
 /**
@@ -21,10 +22,11 @@ class Settings implements ISettings {
   public use_internal_db: boolean;
   public database_url: string | null;
   public is_whitelisted: boolean;
+  public auth_key: string | undefined;
 
   constructor() {
     !fs.existsSync("./settings.json") && this.save();
-    const { port, use_internal_db, ip, is_whitelisted, database_url } = JSON.parse(
+    const { port, use_internal_db, ip, is_whitelisted, database_url, auth_key } = JSON.parse(
       fs.readFileSync("./settings.json", { encoding: "utf-8" })
     ) as ISettings;
     this.ip = !!ip ? ip : "";
@@ -32,6 +34,7 @@ class Settings implements ISettings {
     this.port = port ?? 9669;
     this.is_whitelisted = is_whitelisted ?? false;
     this.use_internal_db = use_internal_db ?? true;
+    this.auth_key = auth_key;
     this.save();
   }
 
