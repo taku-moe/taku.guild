@@ -34,7 +34,7 @@ class Settings implements ISettings {
     this.port = port ?? 9669;
     this.is_whitelisted = is_whitelisted ?? false;
     this.use_internal_db = use_internal_db ?? true;
-    this.auth_key = auth_key;
+    this.auth_key = !!auth_key ? auth_key : "";
     this.save();
   }
 

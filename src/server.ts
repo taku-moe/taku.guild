@@ -20,8 +20,8 @@ class Server {
   public io: io.Server;
   constructor() {
     if(settings.auth_key === undefined) {
-      console.log(chalk.red("[SERVER] No auth key found! Authentication with master server failed!"));
-      process.exit(0);
+      console.error(chalk.red("[SERVER] No auth key found! Authentication with master server failed!"));
+      setTimeout(() => process.exit(0), 60000);
     }
     this.express = express();
     this.express.use(cors({ origin: "*" }));
