@@ -6,6 +6,7 @@ import morgan from "morgan";
 import cors from "cors";
 import io from "socket.io";
 import chalk from "chalk";
+
 /**
  * The main server class that does all the shit you know?
  * @author N1kO23
@@ -16,7 +17,7 @@ import chalk from "chalk";
 class Server {
   public express: Express;
   public server: http.Server;
-  public io: io.Server;  
+  public io: io.Server;
   constructor() {
     this.express = express();
     this.express.use(cors({ origin: "*" }));
@@ -24,10 +25,12 @@ class Server {
     this.express.use(express.json());
 
     // this.express.use("/v1", V1);
-    this.express.get("/", (req, res) => res.status(200).json({message: "hello cunt"}));
+    this.express.get("/", (req, res) => res.status(200).json({ message: "hello cunt" }));
     this.server = http.createServer(this.express);
     this.io = new io.Server(this.server, { cors: { origin: "*" } });
-    this.server.listen(settings.port, () => console.log(chalk.cyan(`[SERVER] Started on port ${settings.port.toString()}`)));
+    this.server.listen(settings.port, () =>
+      console.log(chalk.cyan(`[SERVER] Started on port ${settings.port.toString()}`))
+    );
   }
 }
 

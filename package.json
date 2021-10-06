@@ -5,6 +5,7 @@
   "main": "./src/index.js",
   "scripts": {
     "dev": "nodemon ./src/index.ts",
+    "prettify": "npx prettier --write \"./**/*.ts\" && npx prettier --write \"./**/*.json\"",
     "build": "tsc && npm run compile-linux && npm run compile-macos && npm run compile-win",
     "compile-linux": "pkg -t \"node14-linux-x64\" ./dist/index.js -o \"./build/taku.server.linux.v%npm_package_version%.bin\" --compress Brotli",
     "compile-macos": "pkg -t \"node14-macos-x64\" ./dist/index.js -o \"./build/taku.server.macos.v%npm_package_version%\" --compress Brotli",

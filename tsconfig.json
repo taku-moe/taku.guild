@@ -12,5 +12,5 @@
     "declaration": false,
     "module": "commonjs",
     "forceConsistentCasingInFileNames": true
-  },
+  }
 }
