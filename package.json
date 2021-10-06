@@ -1,0 +1,29 @@
+{
+  "name": "taku.server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon ./index.ts",
+    "build": "tsc && compile-linux && compile-macos && compile-win",
+    "compile-linux": "pkg -t \"node14-linux-x64\" ./dist/index.js -o \"./build/taku.server.linux.v%npm_package_version%.bin\" --compress Brotli",
+    "compile-macos": "pkg -t \"node14-macos-x64\" ./dist/index.js -o \"./build/taku.server.macos.v%npm_package_version%\" --compress Brotli",
+    "compile-win": "pkg -t \"node14-win-x64\" ./dist/index.js -o \"./build/taku.server.win.v%npm_package_version%\" --compress Brotli"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/taku-moe/taku.server.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/taku-moe/taku.server/issues"
+  },
+  "homepage": "https://github.com/taku-moe/taku.server#readme",
+  "devDependencies": {
+    "pkg": "^5.3.3",
+    "ts-node": "^10.2.1",
+    "typescript": "^4.4.3"
+  }
+}
