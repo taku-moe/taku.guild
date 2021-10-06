@@ -1,0 +1,7 @@
+{
+  "ip": null,
+  "port": 9669,
+  "database_url": "",
+  "is_whitelisted": false,
+  "use_internal_db": false
+}

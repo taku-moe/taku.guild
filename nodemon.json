@@ -1,3 +1,4 @@
 {
-  "exec": "ts-node -T ./index.ts"
+  "exec": "ts-node -T ./src/index.ts",
+  "ignore": ["**/*.json"]
 }
