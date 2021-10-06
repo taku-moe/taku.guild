@@ -23,17 +23,17 @@ class Settings implements ISettings {
   public is_whitelisted: boolean;
 
   constructor() {
-    !fs.existsSync("./settings.json") && this.saveSettings();
+    !fs.existsSync("./settings.json") && this.save();
     const {port, use_internal_db, ip, is_whitelisted, database_url} = JSON.parse(fs.readFileSync("./settings.json", {encoding: 'utf-8'})) as ISettings;
     this.ip = !!ip ? ip : "";
     this.database_url = !!database_url ? database_url : "";
     this.port = port ?? 9669;
     this.is_whitelisted = is_whitelisted ?? false;
     this.use_internal_db = use_internal_db ?? true;
-    this.saveSettings();
+    this.save();
   }
 
-  saveSettings(){
+  save(){
     fs.writeFileSync("./settings.json", JSON.stringify(this, null, 2))
   }
 }
