@@ -1,6 +1,6 @@
 {
   "name": "taku.server",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "./src/index.js",
   "scripts": {
@@ -22,7 +22,12 @@
     "url": "https://github.com/taku-moe/taku.server/issues"
   },
   "pkg": {
-    "assets": ["./src/avatar.png", "./src/banner.png", "./src/avatar.gif", "./src/banner.gif"]
+    "assets": [
+      "./src/avatar.png",
+      "./src/banner.png",
+      "./src/avatar.gif",
+      "./src/banner.gif"
+    ]
   },
   "homepage": "https://github.com/taku-moe/taku.server#readme",
   "devDependencies": {
