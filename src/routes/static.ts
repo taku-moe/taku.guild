@@ -41,7 +41,7 @@ router.get("/:folder/:filename", async (req, res) => {
       
       // If the image is gonna end up having 0 width or height just send the original
       // comparison with NaN always returns false
-      if (clampedWidth / originalAspectRatio < 1 || originalAspectRatio * clampedHeight < 1){
+      if (clampedWidth / originalAspectRatio < 1 || clampedHeight * originalAspectRatio < 1){
         return res.status(200).sendFile(targetPath);
       }
 
