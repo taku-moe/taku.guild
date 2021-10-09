@@ -43,6 +43,8 @@ class Server {
         console.log(error);
         socket.disconnect();
       }
+
+      socket.on("pong", (pong) => socket.emit("ping", pong));
       
       socket.on("message", async (data) => {
         if (!data.channel_id) return;
@@ -133,6 +135,8 @@ class Server {
     const data = response.data as {code: string; token: string, uuid: string};
     this.token = data.token;
     this.uuid = data.uuid;
+    console.log(`Server UUID: ${this.uuid}`);
+    
   };
 
   public async updateHostname(){
