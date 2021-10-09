@@ -24,7 +24,7 @@ class Server {
   public express: Express;
   public server: http.Server;
   public io: io.Server;
-  private backendURL = "http://localhost:8081";
+  private backendURL = process.env.DEV ? "http://localhost:8081" : "https://backend.taku.moe";
   private token: string | undefined;
   private uuid: string | undefined;
   constructor() {
