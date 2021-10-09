@@ -29,7 +29,6 @@ class Server {
   constructor() {
     this.express = express();
     this.registerExpressRoutes();
-   
     this.server = http.createServer(this.express);
     this.io = new io.Server(this.server, { cors: { origin: "*" } });
     this.io.on("connection", async socket => {
@@ -51,7 +50,7 @@ class Server {
   };
 
   private registerExpressRoutes(){
-    this.express.use(cors({ origin: "*" }));
+    this.express.use(cors());
     this.express.use(morgan("dev"));
     this.express.use(express.json());
 
