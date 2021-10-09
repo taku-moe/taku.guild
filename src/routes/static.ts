@@ -1,0 +1,55 @@
+import express from "express";
+import fs from "fs";
+import Jimp from "jimp";
+import mimeType from 'file-type';
+
+const SUPPORTED_JIMP_MIMES = ['image/png', 'image/jpg', 'image/bmp']
+
+const router = express.Router();
+
+// https://backend.taku.moe/static/attachments/fuckyou.png?w=256&height=224
+// https://backend.taku.moe/static/attachments/fuckyou.png?w=64
+// https://backend.taku.moe/static/attachments/fuckyou.png?h=72
+// https://backend.taku.moe/static/attachments/fuckyou.png
+router.get("/:folder/:filename", async (req, res) => {
+  const {w, h} = req.query;
+  const {folder, filename} = req.params;
+
+  console.log(w, h, folder, filename);
+
+  // Get the path of the target file
+  const targetPath = process.cwd() + `/uploads/${folder}/${filename}`;
+  
+  // If the user doesn't wanna resize
+  if (!w && !h) return res.status(200).sendFile(targetPath);
+
+  // Load the file and check for mimetype
+  const file = await fs.promises.readFile(targetPath);
+  const mime = await mimeType.fromBuffer(file);
+  if (!mime) return res.status(500).send();
+
+  // If Jimp can process this file then do so
+  if (SUPPORTED_JIMP_MIMES.includes(mime.mime)) {
+    const image = await Jimp.read(file);
+
+    const width = parseInt(w as string);
+    const height = parseInt(h as string);
+
+    const clampedWidth = Math.min(width, image.bitmap.width);
+    const clampedHeight = Math.min(height, image.bitmap.height);
+
+    // This some MaidMarija shit
+    const topEdge = (image.bitmap.height - clampedHeight) * 0.5;
+    const leftEdge = (image.bitmap.width - clampedWidth) * 0.5;
+    // multiplication faster than division B)
+
+    if (width && height) image.crop(leftEdge, topEdge, clampedWidth, clampedHeight);
+    else image.resize(clampedWidth || Jimp.AUTO, clampedHeight || Jimp.AUTO);
+
+    return res.writeHead(200, [['Content-Type', mime.mime]]).end(await image.getBufferAsync(mime.mime));
+  }
+
+  return res.status(404).send();
+});
+
+export const staticRouter = router;

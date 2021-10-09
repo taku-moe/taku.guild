@@ -13,6 +13,7 @@ import { Member } from "./models/Member";
 import { v4 as uuidv4 } from "uuid";
 import { V1 } from "./routes";
 import { Message } from "./models/Message";
+import { staticRouter } from "./routes/static";
 /**
  * The main server class that does all the shit you know?
  * @author N1kO23
@@ -73,7 +74,9 @@ class Server {
     }));
     this.express.use(morgan("dev"));
     this.express.use(express.json());
-    this.express.use(express.static("uploads"));
+    // ?w=256&h=256;
+    // this.express.use(express.static("uploads"));
+    this.express.use("/static", staticRouter);
     this.express.use("/v1", V1);
     this.express.get("/", (req, res) => res.status(200).json({ message: "hello cunt" }));
     this.express.get("/metadata", async (req, res) => res.status(200).json({ 
