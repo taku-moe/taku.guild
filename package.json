@@ -21,17 +21,24 @@
   "bugs": {
     "url": "https://github.com/taku-moe/taku.server/issues"
   },
+  "pkg": {
+    "assets": ["./src/avatar.png", "./src/banner.png", "./src/avatar.gif", "./src/banner.gif"]
+  },
   "homepage": "https://github.com/taku-moe/taku.server#readme",
   "devDependencies": {
     "@types/express": "^4.17.13",
+    "@types/jsonwebtoken": "^8.5.5",
     "@types/morgan": "^1.9.3",
     "pkg": "^5.3.3",
     "ts-node": "^10.2.1",
     "typescript": "^4.4.3"
   },
   "dependencies": {
+    "axios": "^0.22.0",
     "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
     "morgan": "^1.10.0",
+    "node-fetch": "^3.0.0",
     "socket.io": "^4.2.0"
   }
 }
