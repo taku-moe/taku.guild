@@ -45,6 +45,7 @@ class Server {
       }
       
       socket.on("message", async (data) => {
+        if (!data.channel_id) return;
         const message = await new Message({
           _id: uuidv4(),
           created_at: Date.now(),
@@ -52,7 +53,7 @@ class Server {
           replying_to: data.replyingTo,
           author_id: userUUID,
           channel_id: data.channel_id,
-        }).save();
+        }).save().catch(err => console.log(err));
 
         this.io.emit("message", message);
       });
