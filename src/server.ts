@@ -60,15 +60,15 @@ class Server {
       });
     });
     this.express.get("/avatar", async (req, res) => {
-      const avatarPNG = __dirname + '/avatar.png';
-      const avatarGIF = __dirname + '/avatar.gif';
+      const avatarPNG = process.cwd() + '/avatar.png';
+      const avatarGIF = process.cwd() + '/avatar.gif';
       if (fs.existsSync(avatarGIF)) return res.status(200).sendFile(avatarGIF);
       if (fs.existsSync(avatarPNG)) return res.status(200).sendFile(avatarPNG);
       res.status(404).send();
     });
     this.express.get("/banner", async (req, res) => {
-      const bannerPNG = __dirname + '/banner.png';
-      const bannerGIF = __dirname + '/banner.gif';
+      const bannerPNG = process.cwd() + '/banner.png';
+      const bannerGIF = process.cwd() + '/banner.gif';
       if (fs.existsSync(bannerGIF)) return res.status(200).sendFile(bannerGIF);
       if (fs.existsSync(bannerPNG)) return res.status(200).sendFile(bannerPNG);
       res.status(404).send();
