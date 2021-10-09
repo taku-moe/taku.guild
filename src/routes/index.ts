@@ -1,2 +1,2 @@
-// import message from "./v1/message";
-export const V1 = [];
+import guild from "./v1/guild";
+export const V1 = [guild];

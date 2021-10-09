@@ -9,7 +9,9 @@ import chalk from "chalk";
 import axios from "axios";
 import jwt from "jsonwebtoken";
 import fs from "fs";
-
+import { Member } from "./models/Member";
+import { v4 as uuidv4 } from "uuid";
+import { V1 } from "./routes";
 /**
  * The main server class that does all the shit you know?
  * @author N1kO23
@@ -33,10 +35,17 @@ class Server {
     this.io.on("connection", async socket => {
       console.log("new connection");
       if (!this.token || !socket.handshake.auth) return;
-      jwt.verify(socket.handshake.auth.token, this.token);
+      try {
+        const userUUID = jwt.verify(socket.handshake.auth.token, this.token) as string;
+        if (!await Member.findOne({member_id: userUUID})) await new Member({_id: uuidv4(), member_id: userUUID}).save();
+      } catch (error) {
+        console.log(error);
+        socket.disconnect();
+      }
+      
       socket.on("disconnect", () => console.log('socked disconnected'));
     });
-    this.server.listen(settings.port, () =>console.log(chalk.cyan(`[SERVER] Started on port ${settings.port.toString()}`)));
+    this.server.listen(settings.port, () => console.log(chalk.cyan(`[SERVER] Started on port ${settings.port.toString()}`)));
     this.authorizeWithBackend();
     this.updateHostname();
   };
@@ -46,11 +55,12 @@ class Server {
     this.express.use(morgan("dev"));
     this.express.use(express.json());
 
-    // this.express.use("/v1", V1);
+    this.express.use("/v1", V1);
     this.express.get("/", (req, res) => res.status(200).json({ message: "hello cunt" }));
-    this.express.get("/metadata", (req, res) => res.status(200).json({ 
+    this.express.get("/metadata", async (req, res) => res.status(200).json({ 
       _id: this.uuid,
       name: 'Test server',
+      members: (await Member.find()).map(member => member.member_id)
     }));
     this.express.post("/login", async (req, res) => {
       if (!this.token) return res.status(403);
