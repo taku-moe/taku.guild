@@ -39,6 +39,7 @@ class Settings implements ISettings {
     this.is_whitelisted = is_whitelisted ?? false;
     this.use_internal_db = use_internal_db ?? true;
     this.auth_key = !!auth_key ? auth_key : "";
+    
     if(this.auth_key === "") {
       console.error(chalk.red("[FATAL] No auth key found! Authentication with master server failed!"));
       process.exit(0);
