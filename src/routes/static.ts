@@ -53,7 +53,7 @@ router.get("/:folder/:filename", async (req, res) => {
     return res.writeHead(200, [['Content-Type', mime.mime]]).end(buffer);
   };
 
-  return res.status(404).send();
+  return res.status(200).sendFile(targetPath);
 });
 
 export const staticRouter = router;
