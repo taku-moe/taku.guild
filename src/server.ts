@@ -38,6 +38,7 @@ class Server {
     });
     this.server.listen(settings.port, () =>console.log(chalk.cyan(`[SERVER] Started on port ${settings.port.toString()}`)));
     this.authorizeWithBackend();
+    this.updateHostname();
   };
 
   private registerExpressRoutes(){
@@ -105,6 +106,17 @@ class Server {
     const data = response.data as {code: string; token: string, uuid: string};
     this.token = data.token;
     this.uuid = data.uuid;
+  };
+
+  public async updateHostname(){
+    await axios({
+      method: "PATCH",
+      url: this.backendURL + '/v1/guild',
+      data: {
+        key: settings.auth_key,
+        hostname: settings.hostname,
+      }
+    })
   };
 }
 
