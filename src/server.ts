@@ -50,7 +50,9 @@ class Server {
   };
 
   private registerExpressRoutes(){
-    this.express.use(cors());
+    this.express.use(cors({
+      origin: (origin: any, callback: any) => callback(null, true)
+    }));
     this.express.use(morgan("dev"));
     this.express.use(express.json());
 
