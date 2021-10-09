@@ -3,19 +3,13 @@ import fs from "fs";
 import Jimp from "jimp";
 import mimeType from 'file-type';
 
-const SUPPORTED_JIMP_MIMES = ['image/png', 'image/jpg', 'image/bmp']
+const SUPPORTED_JIMP_MIMES = ['image/png', 'image/jpeg', 'image/bmp']
 
 const router = express.Router();
 
-// https://backend.taku.moe/static/attachments/fuckyou.png?w=256&height=224
-// https://backend.taku.moe/static/attachments/fuckyou.png?w=64
-// https://backend.taku.moe/static/attachments/fuckyou.png?h=72
-// https://backend.taku.moe/static/attachments/fuckyou.png
 router.get("/:folder/:filename", async (req, res) => {
   const {w, h} = req.query;
   const {folder, filename} = req.params;
-
-  console.log(w, h, folder, filename);
 
   // Get the path of the target file
   const targetPath = process.cwd() + `/uploads/${folder}/${filename}`;
@@ -38,16 +32,26 @@ router.get("/:folder/:filename", async (req, res) => {
     const clampedWidth = Math.min(width, image.bitmap.width);
     const clampedHeight = Math.min(height, image.bitmap.height);
 
-    // This some MaidMarija shit
     const topEdge = (image.bitmap.height - clampedHeight) * 0.5;
     const leftEdge = (image.bitmap.width - clampedWidth) * 0.5;
-    // multiplication faster than division B)
 
     if (width && height) image.crop(leftEdge, topEdge, clampedWidth, clampedHeight);
-    else image.resize(clampedWidth || Jimp.AUTO, clampedHeight || Jimp.AUTO);
+    else {
+      const originalAspectRatio = image.bitmap.width / image.bitmap.height;
+      
+      // If the image is gonna end up having 0 width or height just send the original
+      // comparison with NaN always returns false
+      if (clampedWidth / originalAspectRatio < 1 || originalAspectRatio * clampedHeight < 1){
+        return res.status(200).sendFile(targetPath);
+      }
 
-    return res.writeHead(200, [['Content-Type', mime.mime]]).end(await image.getBufferAsync(mime.mime));
-  }
+      else image.resize(clampedWidth || Jimp.AUTO, clampedHeight || Jimp.AUTO);
+    }
+
+    const buffer = await image.getBufferAsync(mime.mime);
+
+    return res.writeHead(200, [['Content-Type', mime.mime]]).end(buffer);
+  };
 
   return res.status(404).send();
 });

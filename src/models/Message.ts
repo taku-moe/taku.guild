@@ -13,7 +13,7 @@ export class Attachment implements IAttachment {
 
   constructor(file: Express.Multer.File) {
     this.name = file.originalname;
-    this.link = `${settings.hostname}/${file.filename}`;
+    this.link = `${settings.hostname}/static/${file.filename}`;
   }
 }
 
