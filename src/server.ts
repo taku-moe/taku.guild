@@ -110,7 +110,6 @@ class Server {
 
   public async checkIfUserExists(uuid: string) {
     if (!this.token) return;
-    console.log(uuid);
     
     try {
       const response = await axios(this.backendURL + `/v1/user/${uuid}`, {
