@@ -12,9 +12,9 @@ export interface IChannel {
 
 const schema = new Schema<IChannel>(
   {
-    _id: { type: String, required: true},
-    name: { type: String, required: true},
-    type: { type: String, required: true},
+    _id: { type: String, required: true },
+    name: { type: String, required: true },
+    type: { type: String, required: true },
   },
   {
     versionKey: false,

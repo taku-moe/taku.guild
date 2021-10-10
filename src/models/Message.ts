@@ -46,7 +46,7 @@ const schema = new Schema<IMessage>(
     // The id of the user who sent the message
     author_id: { type: String, required: true },
     // The message they are replying to if any
-    replying_to: {type: String, required: false},
+    replying_to: { type: String, required: false },
   },
   {
     versionKey: false,

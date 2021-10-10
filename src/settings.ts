@@ -35,15 +35,15 @@ class Settings implements ISettings {
     this.ip = !!ip ? ip : "";
     this.database_url = database_url ?? "mongodb://localhost:27017/taku";
     this.port = port ?? 9669;
-    this.hostname = hostname ?? 'localhost:9669';
+    this.hostname = hostname ?? "localhost:9669";
     this.is_whitelisted = is_whitelisted ?? false;
     this.use_internal_db = use_internal_db ?? true;
     this.auth_key = !!auth_key ? auth_key : "";
-    
-    if(this.auth_key === "") {
+
+    if (this.auth_key === "") {
       console.error(chalk.red("[FATAL] No auth key found! Authentication with master server failed!"));
       process.exit(0);
-    };
+    }
     this.save();
   }
 

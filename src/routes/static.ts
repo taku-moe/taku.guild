@@ -1,19 +1,19 @@
 import express from "express";
 import fs from "fs";
 import Jimp from "jimp";
-import mimeType from 'file-type';
+import mimeType from "file-type";
 
-const SUPPORTED_JIMP_MIMES = ['image/png', 'image/jpeg', 'image/bmp']
+const SUPPORTED_JIMP_MIMES = ["image/png", "image/jpeg", "image/bmp"];
 
 const router = express.Router();
 
 router.get("/:folder/:filename", async (req, res) => {
-  const {w, h} = req.query;
-  const {folder, filename} = req.params;
+  const { w, h } = req.query;
+  const { folder, filename } = req.params;
 
   // Get the path of the target file
   const targetPath = process.cwd() + `/uploads/${folder}/${filename}`;
-  
+
   // If the user doesn't wanna resize
   if (!w && !h) return res.status(200).sendFile(targetPath);
 
@@ -38,20 +38,18 @@ router.get("/:folder/:filename", async (req, res) => {
     if (width && height) image.crop(leftEdge, topEdge, clampedWidth, clampedHeight);
     else {
       const originalAspectRatio = image.bitmap.width / image.bitmap.height;
-      
+
       // If the image is gonna end up having 0 width or height just send the original
       // comparison with NaN always returns false
-      if (clampedWidth / originalAspectRatio < 1 || clampedHeight * originalAspectRatio < 1){
+      if (clampedWidth / originalAspectRatio < 1 || clampedHeight * originalAspectRatio < 1) {
         return res.status(200).sendFile(targetPath);
-      }
-
-      else image.resize(clampedWidth || Jimp.AUTO, clampedHeight || Jimp.AUTO);
+      } else image.resize(clampedWidth || Jimp.AUTO, clampedHeight || Jimp.AUTO);
     }
 
     const buffer = await image.getBufferAsync(mime.mime);
 
-    return res.writeHead(200, [['Content-Type', mime.mime]]).end(buffer);
-  };
+    return res.writeHead(200, [["Content-Type", mime.mime]]).end(buffer);
+  }
 
   return res.status(200).sendFile(targetPath);
 });
