@@ -7,8 +7,6 @@ jobs:
     name: Compile Typescript
     runs-on: ubuntu-latest
     steps:
-      - name: Get Environment
-        run: "npx envinfo"
       - name: Checkout
         uses: actions/checkout@v2
       - name: Install dependancies
@@ -26,48 +24,48 @@ jobs:
     runs-on: ubuntu-latest
     needs: compile
     steps:
-      - name: Get Environment
-        run: "npx envinfo"
-      - name: Install Compiler
-        run: "npm i pkg -g"
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install dependancies
+        run: "npm i"
       - name: Download compiled JS
         uses: actions/download-artifact@v2
         with:
           name: compiled_typescript
           path: dist
       - name: "Compile for Linux"
-        run: "pkg -t \"node14-linux-x64\" dist/index.js -o \"./build/taku.server.linux.v%npm_package_version%.bin\" --compress Brotli"
+        run: "npm run compile-linux"
 
   compile_macos:
     name: "Compile for MacOS"
     runs-on: ubuntu-latest
     needs: compile
     steps:
-      - name: Get Environment
-        run: "npx envinfo"
-      - name: Install Compiler
-        run: "npm i pkg -g"
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install dependancies
+        run: "npm i"
       - name: Download compiled JS
         uses: actions/download-artifact@v2
         with:
           name: compiled_typescript
           path: dist
       - name: "Compile for MacOS"
-        run: "pkg -t \"node14-macos-x64\" dist/index.js -o \"./build/taku.server.macos.v%npm_package_version%\" --compress Brotli"
+        run: "npm run compile-macos"
 
   compile_win:
     name: "Compile for Windows"
     runs-on: ubuntu-latest
     needs: compile
     steps:
-      - name: Get Environment
-        run: "npx envinfo"
-      - name: Install Compiler
-        run: "npm i pkg -g"
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install dependancies
+        run: "npm i"
       - name: Download compiled JS
         uses: actions/download-artifact@v2
         with:
           name: compiled_typescript
           path: dist
       - name: "Compile for Windows"
-        run: "pkg -t \"node14-win-x64\" dist/index.js -o \"./build/taku.server.win.v%npm_package_version%\" --compress Brotli"
+        run: "npm run compile-win"
