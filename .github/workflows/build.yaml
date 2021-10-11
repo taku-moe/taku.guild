@@ -201,6 +201,9 @@ jobs:
             tag_name: ${{ steps.version.outputs.version }}
           env:
             GITHUB_TOKEN: ${{ github.token }}
+        - name: Check if Tag Exists Already
+          if: job.steps.create_release.status.code == 'already_exists'
+          run: exit 0
 
         # Upload artifacts to the release
         - name: Upload Linux Artifact
