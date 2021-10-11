@@ -35,7 +35,7 @@ jobs:
           path: dist
       - name: "Compile for Linux"
         run: "npm run compile-linux"
-      - name: Upload compiled JS
+      - name: Upload Compiled Binary
         uses: actions/upload-artifact@v2
         with:
           name: taku.server.linux
@@ -56,7 +56,7 @@ jobs:
           path: dist
       - name: "Compile for MacOS"
         run: "npm run compile-macos"
-      - name: Upload compiled JS
+      - name: Upload Compiled Binary
         uses: actions/upload-artifact@v2
         with:
           name: taku.server.macos
@@ -77,7 +77,7 @@ jobs:
           path: dist
       - name: "Compile for Windows"
         run: "npm run compile-win"
-      - name: Upload compiled JS
+      - name: Upload Compiled Binary
         uses: actions/upload-artifact@v2
         with:
           name: taku.server.win
