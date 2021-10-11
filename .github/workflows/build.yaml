@@ -180,7 +180,7 @@ jobs:
         - name: Checkout
           uses: actions/checkout@v2
         - name: version
-          run: echo "::set-output name=version::$(node -pe 'require('./package.json')['version']')"
+          run: echo "::set-output name=version::$(node -pe 'require(`./package.json`).version')"
           id: version
 
         # Download the artifacts
