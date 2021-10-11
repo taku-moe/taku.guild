@@ -13,9 +13,15 @@ jobs:
         run: "npm i"
       - name: Compile Typescript
         run: "tsc"
-      - name: "Compile for linux"
-        run: "npm run compile-linux"
-      - name: "Compile for macos"
-        run: "npm run compile-macos"
-      - name: "Compile for win"
-        run: "npm run compile-win"
+  compile_linux:
+    name: "Compile for linux"
+    needs: compile
+      run: "npm run compile-linux"
+  compile_macos:
+    name: "Compile for macos"
+    needs: compile
+      run: "npm run compile-macos"
+  compile_win:
+    name: "Compile for win"
+    needs: compile
+      run: "npm run compile-win"
