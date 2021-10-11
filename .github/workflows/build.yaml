@@ -106,8 +106,10 @@ jobs:
         with:
           name: Taku Server Linux
           path: build
+      - name: "Make runnable"
+        run: "chmod +x ./build/taku.server.linux.v%npm_package_version%.bin"
       - name: "Run Binary"
-        run: "./build/taku.server.linux.v%npm_package_version%.bin"
+        run: "sudo ./build/taku.server.linux.v%npm_package_version%.bin"
 
   test_macos:
     name: "Test MacOS Build"
@@ -119,5 +121,7 @@ jobs:
         with:
           name: Taku Server MacOS
           path: build
+      - name: "Make runnable"
+        run: "chmod +x ./build/taku.server.macos.v%npm_package_version%"
       - name: "Run Binary"
-        run: "./build/taku.server.macos.v%npm_package_version%"
+        run: "sudo ./build/taku.server.macos.v%npm_package_version%"
