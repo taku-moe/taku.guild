@@ -4,7 +4,7 @@ on: [push, pull_request]
 
 jobs:
   compile:
-    name: Compile
+    name: Compile Typescript
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -20,10 +20,12 @@ jobs:
           path: dist
 
   compile_linux:
-    name: "Compile for linux"
+    name: "Compile for Linux"
     runs-on: ubuntu-latest
     needs: compile
     steps:
+      - name: List Directories
+        run: "ls"
       - name: Checkout
         uses: actions/checkout@v2
       - name: Install dependancies
@@ -35,10 +37,12 @@ jobs:
       - name: "Compile for Linux"
         run: "npm run compile-linux"
   compile_macos:
-    name: "Compile for macos"
+    name: "Compile for MacOS"
     runs-on: ubuntu-latest
     needs: compile
     steps:
+      - name: List Directories
+        run: "ls"
       - name: Checkout
         uses: actions/checkout@v2
       - name: Install dependancies
@@ -50,10 +54,12 @@ jobs:
       - name: "Compile for MacOS"
         run: "npm run compile-macos"
   compile_win:
-    name: "Compile for win"
+    name: "Compile for Window"
     runs-on: ubuntu-latest
     needs: compile
     steps:
+      - name: List Directories
+        run: "ls"
       - name: Checkout
         uses: actions/checkout@v2
       - name: Install dependancies
