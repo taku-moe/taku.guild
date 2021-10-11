@@ -1,0 +1,24 @@
+name: Build Taku Guild Server
+
+on:
+  push:
+    paths-ignore:
+      - '**.md'
+
+jobs:
+  compile:
+    name: Compile the server
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install dependancies
+        run: "npm i"
+      - name: Compile Typescript
+        run: "tsc"
+      - name: "Compile for linux"
+        run: "npm run compile-linux"
+      - name: "Compile for macos"
+        run: "npm run compile-macos"
+      - name: "Compile for win"
+        run: "npm run compile-win"
