@@ -156,9 +156,9 @@ jobs:
 
       # Compress each folder
       - name: "Compress Linux Archive"
-        run: "cd build/linux && tar -czvf ../../releases/taku.server.linux.tar.gz ./"
+        run: "cd build/linux && zip -r ../../releases/taku.server.linux.zip ./"
       - name: "Compress Linux MacOS"
-        run: "cd build/macos && tar -czvf ../../releases/taku.server.macos.tar.gz ./"
+        run: "cd build/macos && zip -r ../../releases/taku.server.macos.zip ./"
       - name: "Compress Windows Archive"
         run: "cd build/windows && zip -r ../../releases/taku.server.win.zip ./"
 
@@ -211,9 +211,9 @@ jobs:
             GITHUB_TOKEN: ${{ github.token }}
           with:
             upload_url: ${{ steps.create_release.outputs.upload_url }}
-            asset_path: ./releases/taku.server.linux.tar.gz
-            asset_name: taku.server.linux.v${{ steps.version.outputs.version }}.tar.gz
-            asset_content_type: application/gzip
+            asset_path: ./releases/taku.server.linux.zip
+            asset_name: taku.server.linux.v${{ steps.version.outputs.version }}.zip
+            asset_content_type: application/zip
         - name: Upload MacOS Artifact
           uses: actions/upload-release-asset@v1
           continue-on-error: true
@@ -221,9 +221,9 @@ jobs:
             GITHUB_TOKEN: ${{ github.token }}
           with:
             upload_url: ${{ steps.create_release.outputs.upload_url }}
-            asset_path: ./releases/taku.server.macos.tar.gz
-            asset_name: taku.server.macos.v${{ steps.version.outputs.version }}.tar.gz
-            asset_content_type: application/gzip
+            asset_path: ./releases/taku.server.macos.zip
+            asset_name: taku.server.macos.v${{ steps.version.outputs.version }}.zip
+            asset_content_type: application/zip
         - name: Upload Windows Artifact
           uses: actions/upload-release-asset@v1
           continue-on-error: true
