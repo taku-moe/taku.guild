@@ -1,0 +1,84 @@
+name: Build
+
+on: [push, pull_request]
+
+jobs:
+  compile:
+    name: Compile Typescript
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install dependancies
+        run: "npm i"
+      - name: Compile Typescript
+        run: "tsc"
+      - name: Upload compiled JS
+        uses: actions/upload-artifact@v2
+        with:
+          name: Compiled Typescript
+          path: dist
+
+  compile_linux:
+    name: "Compile for Linux"
+    runs-on: ubuntu-latest
+    needs: compile
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install dependancies
+        run: "npm i"
+      - name: Download compiled JS
+        uses: actions/download-artifact@v2
+        with:
+          name: Compiled Typescript
+          path: dist
+      - name: "Compile for Linux"
+        run: "npm run compile-linux"
+      - name: Upload compiled JS
+        uses: actions/upload-artifact@v2
+        with:
+          name: Taku Server Linux
+          path: build
+  compile_macos:
+    name: "Compile for MacOS"
+    runs-on: ubuntu-latest
+    needs: compile
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install dependancies
+        run: "npm i"
+      - name: Download compiled JS
+        uses: actions/download-artifact@v2
+        with:
+          name: Compiled Typescript
+          path: dist
+      - name: "Compile for MacOS"
+        run: "npm run compile-macos"
+      - name: Upload compiled JS
+        uses: actions/upload-artifact@v2
+        with:
+          name: Taku Server MacOS
+          path: build
+  compile_win:
+    name: "Compile for Windows"
+    runs-on: ubuntu-latest
+    needs: compile
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install dependancies
+        run: "npm i"
+      - name: Download compiled JS
+        uses: actions/download-artifact@v2
+        with:
+          name: Compiled Typescript
+          path: dist
+      - name: "Compile for Windows"
+        run: "npm run compile-win"
+      - name: Upload compiled JS
+        uses: actions/upload-artifact@v2
+        with:
+          name: Taku Server Windows
+          path: build
