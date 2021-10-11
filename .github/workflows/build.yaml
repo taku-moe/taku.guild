@@ -94,7 +94,7 @@ jobs:
           name: Taku Server Windows
           path: build
       - name: "Run Binary"
-        run: "taku.server.win.v%npm_package_version%.exe"
+        run: "./build/taku.server.win.v%npm_package_version%.exe"
 
   test_linux:
     name: "Test Linux Build"
@@ -107,7 +107,7 @@ jobs:
           name: Taku Server Linux
           path: build
       - name: "Run Binary"
-        run: "taku.server.linux.v%npm_package_version%.bin"
+        run: "./build/taku.server.linux.v%npm_package_version%.bin"
 
   test_macos:
     name: "Test MacOS Build"
@@ -120,4 +120,4 @@ jobs:
           name: Taku Server MacOS
           path: build
       - name: "Run Binary"
-        run: "taku.server.macos.v%npm_package_version%"
+        run: "./build/taku.server.macos.v%npm_package_version%"
