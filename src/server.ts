@@ -81,8 +81,6 @@ class Server {
     );
     this.express.use(morgan("dev"));
     this.express.use(express.json());
-    // ?w=256&h=256;
-    // this.express.use(express.static("uploads"));
     this.express.use("/static", staticRouter);
     this.express.use("/v1", V1);
     this.express.get("/", (req, res) => res.status(200).json({ message: "hello cunt" }));
