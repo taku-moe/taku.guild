@@ -1,4 +1,4 @@
-name: Build Taku Guild Server
+name: Build
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   compile:
-    name: Compile the server
+    name: Compile
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
