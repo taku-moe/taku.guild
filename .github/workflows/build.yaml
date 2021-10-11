@@ -1,9 +1,6 @@
 name: Build
 
-on:
-  push:
-    paths-ignore:
-      - '**.md'
+on: [push, pull_request]
 
 jobs:
   compile:
