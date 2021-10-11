@@ -16,7 +16,7 @@ jobs:
       - name: Upload compiled JS
         uses: actions/upload-artifact@v2
         with:
-          name: compiled_js
+          name: dist
           path: dist
 
   compile_linux:
@@ -33,7 +33,7 @@ jobs:
       - name: Download compiled JS
         uses: actions/download-artifact@v2
         with:
-          name: compiled_js
+          name: dist
       - name: "Compile for Linux"
         run: "npm run compile-linux"
   compile_macos:
@@ -50,7 +50,7 @@ jobs:
       - name: Download compiled JS
         uses: actions/download-artifact@v2
         with:
-          name: compiled_js
+          name: dist
       - name: "Compile for MacOS"
         run: "npm run compile-macos"
   compile_win:
@@ -67,6 +67,6 @@ jobs:
       - name: Download compiled JS
         uses: actions/download-artifact@v2
         with:
-          name: compiled_js
+          name: dist
       - name: "Compile for Windows"
         run: "npm run compile-win"
