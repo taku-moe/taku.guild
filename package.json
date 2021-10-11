@@ -1,6 +1,6 @@
 {
   "name": "taku.server",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "",
   "main": "./src/index.js",
   "scripts": {
@@ -8,9 +8,9 @@
     "prod": "nodemon ./src/index.ts",
     "prettify": "npx prettier --write \"./**/*.ts\" && npx prettier --write \"./**/*.json\"",
     "build": "tsc && npm run compile-linux && npm run compile-macos && npm run compile-win",
-    "compile-linux": "pkg -t \"node14-linux-x64\" ./dist/index.js -o \"./build/taku.server.linux.v%npm_package_version%.bin\" --compress Brotli",
-    "compile-macos": "pkg -t \"node14-macos-x64\" ./dist/index.js -o \"./build/taku.server.macos.v%npm_package_version%\" --compress Brotli",
-    "compile-win": "pkg -t \"node14-win-x64\" ./dist/index.js -o \"./build/taku.server.win.v%npm_package_version%\" --compress Brotli"
+    "compile-linux": "pkg -t \"node14-linux-x64\" ./dist/index.js -o \"./build/taku.server.linux.${vnpm_package_version}.bin\" --compress Brotli",
+    "compile-macos": "pkg -t \"node14-macos-x64\" ./dist/index.js -o \"./build/taku.server.macos.${vnpm_package_version}\" --compress Brotli",
+    "compile-win": "pkg -t \"node14-win-x64\" ./dist/index.js -o \"./build/taku.server.win.${vnpm_package_version}\" --compress Brotli"
   },
   "repository": {
     "type": "git",

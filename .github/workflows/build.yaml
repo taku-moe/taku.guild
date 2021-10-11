@@ -156,11 +156,11 @@ jobs:
 
       # Compress each folder
       - name: "Compress Linux Archive"
-        run: "tar -czvf ./releases/taku.server.linux.tar.gz build/linux/"
+        run: "cd build/linux && tar -czvf ../../releases/taku.server.linux.tar.gz ./"
       - name: "Compress Linux MacOS"
-        run: "tar -czvf ./releases/taku.server.macos.tar.gz build/macos/"
+        run: "cd build/macos && tar -czvf ../../releases/taku.server.macos.tar.gz ./"
       - name: "Compress Windows Archive"
-        run: "zip -r ./releases/taku.server.win.zip build/windows/"
+        run: "cd build/windows && zip -r ../../releases/taku.server.win.zip ./"
 
       # Upload them all as an artifact
       - name: "Upload Release Builds"
@@ -180,7 +180,7 @@ jobs:
         - name: Checkout
           uses: actions/checkout@v2
         - name: version
-          run: echo "::set-output name=version::$(node -pe 'require(\"./package.json\")[\"version\"]')"
+          run: echo "::set-output name=version::$(node -pe 'require('./package.json')['version']')"
           id: version
 
         # Download the artifacts
@@ -198,7 +198,7 @@ jobs:
             draft: false
             prerelease: false
             release_name: ${{ steps.version.outputs.version }}
-            tag_name: ${{ github.ref }}
+            tag_name: ${{ steps.version.outputs.version }}
           env:
             GITHUB_TOKEN: ${{ github.token }}
 
