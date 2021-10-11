@@ -82,3 +82,42 @@ jobs:
         with:
           name: Taku Server Windows
           path: build
+
+  test_win:
+    name: "Test Windows Build"
+    runs-on: windows-latest
+    needs: compile_win
+    steps:
+      - name: Download Windows Binary
+        uses: actions/download-artifact@v2
+        with:
+          name: Taku Server Windows
+          path: build
+      - name: "Run Binary"
+        run: "taku.server.win.v%npm_package_version%.exe"
+
+  test_linux:
+    name: "Test Linux Build"
+    runs-on: ubuntu-latest
+    needs: compile_linux
+    steps:
+      - name: Download Linux Binary
+        uses: actions/download-artifact@v2
+        with:
+          name: Taku Server Linux
+          path: build
+      - name: "Run Binary"
+        run: "taku.server.linux.v%npm_package_version%.bin"
+
+  test_macos:
+    name: "Test MacOS Build"
+    runs-on: macos-latest
+    needs: compile_macos
+    steps:
+      - name: Download MacOS Binary
+        uses: actions/download-artifact@v2
+        with:
+          name: Taku Server MacOS
+          path: build
+      - name: "Run Binary"
+        run: "taku.server.macos.v%npm_package_version%"
