@@ -203,13 +203,10 @@ jobs:
           env:
             GITHUB_TOKEN: ${{ github.token }}
 
-        - name: Check if Tag Exists Already
-          if: steps.create_release.conclusion == 'failure'
-          run: exit 0
-
         # Upload artifacts to the release
         - name: Upload Linux Artifact
           uses: actions/upload-release-asset@v1
+          continue-on-error: true
           env:
             GITHUB_TOKEN: ${{ github.token }}
           with:
@@ -219,6 +216,7 @@ jobs:
             asset_content_type: application/gzip
         - name: Upload MacOS Artifact
           uses: actions/upload-release-asset@v1
+          continue-on-error: true
           env:
             GITHUB_TOKEN: ${{ github.token }}
           with:
@@ -228,6 +226,7 @@ jobs:
             asset_content_type: application/gzip
         - name: Upload Windows Artifact
           uses: actions/upload-release-asset@v1
+          continue-on-error: true
           env:
             GITHUB_TOKEN: ${{ github.token }}
           with:
