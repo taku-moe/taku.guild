@@ -18,7 +18,7 @@ jobs:
       - name: Upload compiled JS
         uses: actions/upload-artifact@v2
         with:
-          name: dist
+          name: compiled_typescript
           path: dist
 
   compile_linux:
@@ -33,9 +33,10 @@ jobs:
       - name: Download compiled JS
         uses: actions/download-artifact@v2
         with:
-          name: dist
+          name: compiled_typescript
+          path: dist
       - name: "Compile for Linux"
-        run: "pkg -t \"node14-linux-x64\" ./dist/index.js -o \"./build/taku.server.linux.v%npm_package_version%.bin\" --compress Brotli"
+        run: "pkg -t \"node14-linux-x64\" dist/index.js -o \"./build/taku.server.linux.v%npm_package_version%.bin\" --compress Brotli"
 
   compile_macos:
     name: "Compile for MacOS"
@@ -49,9 +50,10 @@ jobs:
       - name: Download compiled JS
         uses: actions/download-artifact@v2
         with:
-          name: dist
+          name: compiled_typescript
+          path: dist
       - name: "Compile for MacOS"
-        run: "pkg -t \"node14-macos-x64\" ./dist/index.js -o \"./build/taku.server.macos.v%npm_package_version%\" --compress Brotli"
+        run: "pkg -t \"node14-macos-x64\" dist/index.js -o \"./build/taku.server.macos.v%npm_package_version%\" --compress Brotli"
 
   compile_win:
     name: "Compile for Windows"
@@ -65,6 +67,7 @@ jobs:
       - name: Download compiled JS
         uses: actions/download-artifact@v2
         with:
-          name: dist
+          name: compiled_typescript
+          path: dist
       - name: "Compile for Windows"
-        run: "pkg -t \"node14-win-x64\" ./dist/index.js -o \"./build/taku.server.win.v%npm_package_version%\" --compress Brotli"
+        run: "pkg -t \"node14-win-x64\" dist/index.js -o \"./build/taku.server.win.v%npm_package_version%\" --compress Brotli"
