@@ -16,7 +16,7 @@ jobs:
       - name: Upload compiled JS
         uses: actions/upload-artifact@v2
         with:
-          name: compiled_typescript
+          name: Compiled Typescript
           path: dist
 
   compile_linux:
@@ -31,14 +31,14 @@ jobs:
       - name: Download compiled JS
         uses: actions/download-artifact@v2
         with:
-          name: compiled_typescript
+          name: Compiled Typescript
           path: dist
       - name: "Compile for Linux"
         run: "npm run compile-linux"
       - name: Upload compiled JS
         uses: actions/upload-artifact@v2
         with:
-          name: taku.server.linux
+          name: Taku Server Linux
           path: build
   compile_macos:
     name: "Compile for MacOS"
@@ -59,7 +59,7 @@ jobs:
       - name: Upload compiled JS
         uses: actions/upload-artifact@v2
         with:
-          name: taku.server.macos
+          name: Taku Server MacOS
           path: build
   compile_win:
     name: "Compile for Windows"
@@ -80,5 +80,5 @@ jobs:
       - name: Upload compiled JS
         uses: actions/upload-artifact@v2
         with:
-          name: taku.server.win
+          name: Taku Server Windows
           path: build
