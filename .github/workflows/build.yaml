@@ -35,7 +35,7 @@ jobs:
         with:
           name: dist
       - name: "Compile for Linux"
-        run: "pkg -t \"node14-linux-x64\" ./dist/index.js -o \"./build/taku.server.linux.v%npm_package_version%.bin\" --compress Brotli",
+        run: "pkg -t \"node14-linux-x64\" ./dist/index.js -o \"./build/taku.server.linux.v%npm_package_version%.bin\" --compress Brotli"
 
   compile_macos:
     name: "Compile for MacOS"
@@ -51,7 +51,7 @@ jobs:
         with:
           name: dist
       - name: "Compile for MacOS"
-        run: "pkg -t \"node14-macos-x64\" ./dist/index.js -o \"./build/taku.server.macos.v%npm_package_version%\" --compress Brotli",
+        run: "pkg -t \"node14-macos-x64\" ./dist/index.js -o \"./build/taku.server.macos.v%npm_package_version%\" --compress Brotli"
 
   compile_win:
     name: "Compile for Windows"
