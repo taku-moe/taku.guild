@@ -1,4 +1,4 @@
-name: Build
+name: act
 
 on: [push, pull_request]
 
@@ -16,7 +16,7 @@ jobs:
       - name: Upload compiled JS
         uses: actions/upload-artifact@v2
         with:
-          name: Compiled Typescript
+          name: compiled.typescript
           path: dist
 
   compile_linux:
@@ -31,14 +31,14 @@ jobs:
       - name: Download compiled JS
         uses: actions/download-artifact@v2
         with:
-          name: Compiled Typescript
+          name: compiled.typescript
           path: dist
       - name: "Compile for Linux"
         run: "npm run compile-linux"
       - name: Upload compiled JS
         uses: actions/upload-artifact@v2
         with:
-          name: Taku Server Linux
+          name: taku.server.linux
           path: build
   compile_macos:
     name: "Compile for MacOS"
@@ -52,14 +52,14 @@ jobs:
       - name: Download compiled JS
         uses: actions/download-artifact@v2
         with:
-          name: Compiled Typescript
+          name: compiled.typescript
           path: dist
       - name: "Compile for MacOS"
         run: "npm run compile-macos"
       - name: Upload compiled JS
         uses: actions/upload-artifact@v2
         with:
-          name: Taku Server MacOS
+          name: taku.server.macos
           path: build
   compile_win:
     name: "Compile for Windows"
@@ -73,14 +73,14 @@ jobs:
       - name: Download compiled JS
         uses: actions/download-artifact@v2
         with:
-          name: Compiled Typescript
+          name: compiled.typescript
           path: dist
       - name: "Compile for Windows"
         run: "npm run compile-win"
       - name: Upload compiled JS
         uses: actions/upload-artifact@v2
         with:
-          name: Taku Server Windows
+          name: taku.server.win
           path: build
 
   test_win:
@@ -91,10 +91,10 @@ jobs:
       - name: Download Windows Binary
         uses: actions/download-artifact@v2
         with:
-          name: Taku Server Windows
+          name: taku.server.win
           path: build
       - name: "Run Binary"
-        run: "./build/taku.server.win.v%npm_package_version%.exe"
+        run: "./build/*.exe"
 
   test_linux:
     name: "Test Linux Build"
@@ -104,12 +104,12 @@ jobs:
       - name: Download Linux Binary
         uses: actions/download-artifact@v2
         with:
-          name: Taku Server Linux
+          name: taku.server.linux
           path: build
       - name: "Make runnable"
-        run: "chmod +x ./build/taku.server.linux.v%npm_package_version%.bin"
+        run: "chmod +x ./build/*.bin"
       - name: "Run Binary"
-        run: "sudo ./build/taku.server.linux.v%npm_package_version%.bin"
+        run: "sudo ./build/*.bin"
 
   test_macos:
     name: "Test MacOS Build"
@@ -119,9 +119,114 @@ jobs:
       - name: Download MacOS Binary
         uses: actions/download-artifact@v2
         with:
-          name: Taku Server MacOS
+          name: taku.server.macos
           path: build
+
       - name: "Make runnable"
-        run: "chmod +x ./build/taku.server.macos.v%npm_package_version%"
+        run: "chmod +x ./build/*"
       - name: "Run Binary"
-        run: "sudo ./build/taku.server.macos.v%npm_package_version%"
+        run: "sudo ./build/*"
+
+  package:
+    name: "Package up Archives"
+    runs-on: ubuntu-latest
+    needs: ['test_macos', 'test_linux', 'test_win']
+    steps:
+
+      # Download the artifacts
+      - name: Download MacOS Binary
+        uses: actions/download-artifact@v2
+        with:
+          name: taku.server.macos
+          path: build/macos
+      - name: Download Windows Binary
+        uses: actions/download-artifact@v2
+        with:
+          name: taku.server.win
+          path: build/windows
+      - name: Download Linux Binary
+        uses: actions/download-artifact@v2
+        with:
+          name: taku.server.linux
+          path: build/linux
+
+      # Create dest folder for saving archives
+      - name: "Create Destination Folder"
+        run: "mkdir releases"
+
+      # Compress each folder
+      - name: "Compress Linux Archive"
+        run: "tar -czvf ./releases/taku.server.linux.tar.gz build/linux/"
+      - name: "Compress Linux MacOS"
+        run: "tar -czvf ./releases/taku.server.macos.tar.gz build/macos/"
+      - name: "Compress Windows Archive"
+        run: "zip -r ./releases/taku.server.win.zip build/windows/"
+
+      # Upload them all as an artifact
+      - name: "Upload Release Builds"
+        uses: actions/upload-artifact@v2
+        with:
+          name: Taku Server Builds
+          path: releases
+
+  # Publish the compiled files to Github's releases
+  release:
+      name: "Release Build"
+      runs-on: ubuntu-latest
+      needs: package
+      steps:
+        
+        # Yes we get the repo again but only for the version in the package.json
+        - name: Checkout
+          uses: actions/checkout@v2
+        - name: version
+          run: echo "::set-output name=version::$(node -pe 'require(\"./package.json\")[\"version\"]')"
+          id: version
+
+        # Download the artifacts
+        - name: Download Binaries
+          uses: actions/download-artifact@v2
+          with:
+            name: Taku Server Builds
+            path: releases
+
+        # The release script that prepares a new Github release
+        - name: Create Release
+          uses: actions/create-release@v1
+          id: create_release
+          with:
+            draft: false
+            prerelease: false
+            release_name: ${{ steps.version.outputs.version }}
+            tag_name: ${{ steps.version.outputs.version }}
+          env:
+            GITHUB_TOKEN: ${{ github.token }}
+
+        # Upload artifacts to the release
+        - name: Upload Linux Artifact
+          uses: actions/upload-release-asset@v1
+          env:
+            GITHUB_TOKEN: ${{ github.token }}
+          with:
+            upload_url: ${{ steps.create_release.outputs.upload_url }}
+            asset_path: ./releases/taku.server.linux.tar.gz
+            asset_name: taku.server.linux.v${{ steps.version.outputs.version }}.tar.gz
+            asset_content_type: application/gzip
+        - name: Upload MacOS Artifact
+          uses: actions/upload-release-asset@v1
+          env:
+            GITHUB_TOKEN: ${{ github.token }}
+          with:
+            upload_url: ${{ steps.create_release.outputs.upload_url }}
+            asset_path: ./releases/taku.server.macos.tar.gz
+            asset_name: taku.server.macos.v${{ steps.version.outputs.version }}.tar.gz
+            asset_content_type: application/gzip
+        - name: Upload Windows Artifact
+          uses: actions/upload-release-asset@v1
+          env:
+            GITHUB_TOKEN: ${{ github.token }}
+          with:
+            upload_url: ${{ steps.create_release.outputs.upload_url }}
+            asset_path: ./releases/taku.server.win.zip
+            asset_name: taku.server.win.v${{ steps.version.outputs.version }}.zip
+            asset_content_type: application/zip
