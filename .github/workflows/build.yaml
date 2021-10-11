@@ -194,6 +194,7 @@ jobs:
         - name: Create Release
           uses: actions/create-release@v1
           id: create_release
+          continue-on-error: true
           with:
             draft: false
             prerelease: false
@@ -201,6 +202,7 @@ jobs:
             tag_name: ${{ steps.version.outputs.version }}
           env:
             GITHUB_TOKEN: ${{ github.token }}
+
         - name: Check if Tag Exists Already
           if: job.steps.create_release.status.code == 'already_exists'
           run: exit 0
