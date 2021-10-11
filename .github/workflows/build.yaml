@@ -179,9 +179,8 @@ jobs:
         # Yes we get the repo again but only for the version in the package.json
         - name: Checkout
           uses: actions/checkout@v2
-        - name: version
-          run: echo "::set-output name=version::$(node -pe 'require(`./package.json`).version')"
-          id: version
+        - name: Set Version Variable
+          run: VERSION=$(node -pe 'require(`./package.json`).version')
 
         # Download the artifacts
         - name: Download Binaries
@@ -197,8 +196,8 @@ jobs:
           with:
             draft: false
             prerelease: false
-            release_name: ${{ steps.version.outputs.version }}
-            tag_name: ${{ steps.version.outputs.version }}
+            release_name: ${VERSION}
+            tag_name: ${VERSION}
           env:
             GITHUB_TOKEN: ${{ github.token }}
 
@@ -210,7 +209,7 @@ jobs:
           with:
             upload_url: ${{ steps.create_release.outputs.upload_url }}
             asset_path: ./releases/taku.server.linux.tar.gz
-            asset_name: taku.server.linux.v${{ steps.version.outputs.version }}.tar.gz
+            asset_name: taku.server.linux.v${VERSION}.tar.gz
             asset_content_type: application/gzip
         - name: Upload MacOS Artifact
           uses: actions/upload-release-asset@v1
@@ -219,7 +218,7 @@ jobs:
           with:
             upload_url: ${{ steps.create_release.outputs.upload_url }}
             asset_path: ./releases/taku.server.macos.tar.gz
-            asset_name: taku.server.macos.v${{ steps.version.outputs.version }}.tar.gz
+            asset_name: taku.server.macos.v${VERSION}.tar.gz
             asset_content_type: application/gzip
         - name: Upload Windows Artifact
           uses: actions/upload-release-asset@v1
@@ -228,5 +227,5 @@ jobs:
           with:
             upload_url: ${{ steps.create_release.outputs.upload_url }}
             asset_path: ./releases/taku.server.win.zip
-            asset_name: taku.server.win.v${{ steps.version.outputs.version }}.zip
+            asset_name: taku.server.win.v${VERSION}.zip
             asset_content_type: application/zip
