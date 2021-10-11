@@ -52,7 +52,7 @@ jobs:
       - name: Download compiled JS
         uses: actions/download-artifact@v2
         with:
-          name: compiled_typescript
+          name: Compiled Typescript
           path: dist
       - name: "Compile for MacOS"
         run: "npm run compile-macos"
@@ -73,7 +73,7 @@ jobs:
       - name: Download compiled JS
         uses: actions/download-artifact@v2
         with:
-          name: compiled_typescript
+          name: Compiled Typescript
           path: dist
       - name: "Compile for Windows"
         run: "npm run compile-win"
