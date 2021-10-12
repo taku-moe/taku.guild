@@ -11,6 +11,9 @@ jobs:
         uses: actions/checkout@v2
       - name: Install dependancies
         run: "npm i"
+      - name: Set Version Variable
+        run: echo "::set-output name=version::$(node -pe 'require(`./package.json`).version')"
+        id: version
       - name: Compile Typescript
         run: "tsc"
       - name: Upload compiled JS
@@ -19,235 +22,256 @@ jobs:
           name: compiled.typescript
           path: dist
 
-  compile_linux:
-    name: "Compile for Linux"
-    runs-on: ubuntu-latest
-    needs: compile
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: "Install libvips"
-        run: "sudo apt update -y && sudo apt install -y libvips"
-      - name: Install NPM dependancies
-        run: "npm i --platform linux"
-      - name: Download compiled JS
-        uses: actions/download-artifact@v2
-        with:
-          name: compiled.typescript
-          path: dist
-      - name: "Compile for Linux"
-        run: "npm run compile-linux"
-      - name: "Include Libraries"
-        run: "npm run cope-libraries"
-      - name: Upload Compiled Binary
-        uses: actions/upload-artifact@v2
-        with:
-          name: taku.server.linux
-          path: build
+      # # Compress folder
+      # - name: "Compress Archive"
+      #   run: cd dist && zip -r ../releases/taku.server.v${{ steps.version.outputs.version }}.zip ./
+
+      # # The release script that prepares a new Github release
+      # - name: Create Release
+      #   uses: actions/create-release@v1
+      #   id: create_release
+      #   continue-on-error: true
+      #   with:
+      #     draft: false
+      #     prerelease: false
+      #     release_name: ${{ steps.version.outputs.version }}
+      #     tag_name: ${{ steps.version.outputs.version }}
+      #   env:
+      #     GITHUB_TOKEN: ${{ github.token }}
+
+      # # Upload the shit
+      # - name: Upload Release
+      #   uses: actions/upload-release-asset@v1
+      #   continue-on-error: true
+      #   env:
+      #     GITHUB_TOKEN: ${{ github.token }}
+      #   with:
+      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
+      #     asset_path: ./releases/taku.server.v${{ steps.version.outputs.version }}.zip
+      #     asset_name: taku.server.v${{ steps.version.outputs.version }}.zip
+      #     asset_content_type: application/zip
+
+  # compile_linux:
+  #   name: "Compile for Linux"
+  #   runs-on: ubuntu-latest
+  #   needs: compile
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
+  #     - name: Install NPM dependancies
+  #       run: "npm i"
+  #     - name: Download compiled JS
+  #       uses: actions/download-artifact@v2
+  #       with:
+  #         name: compiled.typescript
+  #         path: dist
+  #     - name: "Compile for Linux"
+  #       run: "npm run compile-linux"
+  #     - name: "Include Sharp Binaries"
+  #       run: "cp -R node_modules/sharp build"
+  #     - name: Upload Compiled Binary
+  #       uses: actions/upload-artifact@v2
+  #       with:
+  #         name: taku.server.linux
+  #         path: build
+
+  # compile_macos:
+  #   name: "Compile for MacOS"
+  #   runs-on: ubuntu-latest
+  #   needs: compile
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
+  #     - name: Install NPM dependancies
+  #       run: "npm i"
+  #     - name: Download compiled JS
+  #       uses: actions/download-artifact@v2
+  #       with:
+  #         name: compiled.typescript
+  #         path: dist
+  #     - name: "Compile for MacOS"
+  #       run: "npm run compile-macos"
+  #     - name: "Include Sharp Binaries"
+  #       run: "cp -R node_modules/sharp build"
+  #     - name: Upload Compiled Binary
+  #       uses: actions/upload-artifact@v2
+  #       with:
+  #         name: taku.server.macos
+  #         path: build
       
 
-  compile_macos:
-    name: "Compile for MacOS"
-    runs-on: ubuntu-latest
-    needs: compile
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: "Install libvips"
-        run: "sudo apt update -y && sudo apt install -y libvips"
-      - name: Install NPM dependancies
-        run: "npm i --platform darwin"
-      - name: Download compiled JS
-        uses: actions/download-artifact@v2
-        with:
-          name: compiled.typescript
-          path: dist
-      - name: "Compile for MacOS"
-        run: "npm run compile-macos"
-      - name: "Include Libraries"
-        run: "npm run cope-libraries"
-      - name: Upload Compiled Binary
-        uses: actions/upload-artifact@v2
-        with:
-          name: taku.server.macos
-          path: build
+  # compile_win:
+  #   name: "Compile for Windows"
+  #   runs-on: ubuntu-latest
+  #   needs: compile
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
+  #     - name: Install NPM dependancies
+  #       run: "npm i"
+  #     - name: Download compiled JS
+  #       uses: actions/download-artifact@v2
+  #       with:
+  #         name: compiled.typescript
+  #         path: dist
+  #     - name: "Compile for Windows"
+  #       run: "npm run compile-win"
+  #     - name: "Include Sharp Binaries"
+  #       run: "cp -R node_modules/sharp build"
+  #     - name: Upload Compiled Binary
+  #       uses: actions/upload-artifact@v2
+  #       with:
+  #         name: taku.server.win
+  #         path: build
       
 
-  compile_win:
-    name: "Compile for Windows"
-    runs-on: ubuntu-latest
-    needs: compile
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: "Install libvips"
-        run: "sudo apt update -y && sudo apt install -y libvips"
-      - name: Install NPM dependancies
-        run: "npm i --platform win32"
-      - name: Download compiled JS
-        uses: actions/download-artifact@v2
-        with:
-          name: compiled.typescript
-          path: dist
-      - name: "Compile for Windows"
-        run: "npm run compile-win"
-      - name: "Include Libraries"
-        run: "npm run cope-libraries"
-      - name: Upload Compiled Binary
-        uses: actions/upload-artifact@v2
-        with:
-          name: taku.server.win
-          path: build
-      
+  # test_win:
+  #   name: "Test Windows Build"
+  #   runs-on: windows-latest
+  #   needs: compile_win
+  #   steps:
+  #     - name: Download Windows Binary
+  #       uses: actions/download-artifact@v2
+  #       with:
+  #         name: taku.server.win
+  #         path: build
+  #     - name: "Run Binary"
+  #       run: "./build/*.exe"
 
-  test_win:
-    name: "Test Windows Build"
-    runs-on: windows-latest
-    needs: compile_win
-    steps:
-      - name: Download Windows Binary
-        uses: actions/download-artifact@v2
-        with:
-          name: taku.server.win
-          path: build
-      - name: "Run Binary"
-        run: "./build/*.exe"
+  # test_linux:
+  #   name: "Test Linux Build"
+  #   runs-on: ubuntu-latest
+  #   needs: compile_linux
+  #   steps:
+  #     - name: Download Linux Binary
+  #       uses: actions/download-artifact@v2
+  #       with:
+  #         name: taku.server.linux
+  #         path: build
+  #     - name: "Make runnable"
+  #       run: "chmod +x ./build/*.bin"
+  #     - name: "Run Binary"
+  #       run: "sudo ./build/*.bin"
 
-  test_linux:
-    name: "Test Linux Build"
-    runs-on: ubuntu-latest
-    needs: compile_linux
-    steps:
-      - name: Download Linux Binary
-        uses: actions/download-artifact@v2
-        with:
-          name: taku.server.linux
-          path: build
-      - name: "Make runnable"
-        run: "chmod +x ./build/*.bin"
-      - name: "Run Binary"
-        run: "sudo ./build/*.bin"
+  # test_macos:
+  #   name: "Test MacOS Build"
+  #   runs-on: macos-latest
+  #   needs: compile_macos
+  #   steps:
+  #     - name: Download MacOS Binary
+  #       uses: actions/download-artifact@v2
+  #       with:
+  #         name: taku.server.macos
+  #         path: build
+  #     - name: "Make runnable"
+  #       run: "chmod +x ./build/taku.server.*"
+  #     - name: "Run Binary"
+  #       run: "sudo ./build/taku.server.*"
 
-  test_macos:
-    name: "Test MacOS Build"
-    runs-on: macos-latest
-    needs: compile_macos
-    steps:
-      - name: Download MacOS Binary
-        uses: actions/download-artifact@v2
-        with:
-          name: taku.server.macos
-          path: build
+  # package:
+  #   name: "Package up Archives"
+  #   runs-on: ubuntu-latest
+  #   needs: ['test_macos', 'test_linux', 'test_win']
+  #   steps:
 
-      - name: "Make runnable"
-        run: "chmod +x ./build/*"
-      - name: "Run Binary"
-        run: "sudo ./build/*"
+  #     # Download the artifacts
+  #     - name: Download MacOS Binary
+  #       uses: actions/download-artifact@v2
+  #       with:
+  #         name: taku.server.macos
+  #         path: build/macos
+  #     - name: Download Windows Binary
+  #       uses: actions/download-artifact@v2
+  #       with:
+  #         name: taku.server.win
+  #         path: build/windows
+  #     - name: Download Linux Binary
+  #       uses: actions/download-artifact@v2
+  #       with:
+  #         name: taku.server.linux
+  #         path: build/linux
 
-  package:
-    name: "Package up Archives"
-    runs-on: ubuntu-latest
-    needs: ['test_macos', 'test_linux', 'test_win']
-    steps:
+  #     # Create dest folder for saving archives
+  #     - name: "Create Destination Folder"
+  #       run: "mkdir releases"
 
-      # Download the artifacts
-      - name: Download MacOS Binary
-        uses: actions/download-artifact@v2
-        with:
-          name: taku.server.macos
-          path: build/macos
-      - name: Download Windows Binary
-        uses: actions/download-artifact@v2
-        with:
-          name: taku.server.win
-          path: build/windows
-      - name: Download Linux Binary
-        uses: actions/download-artifact@v2
-        with:
-          name: taku.server.linux
-          path: build/linux
+  #     # Compress each folder
+  #     - name: "Compress Linux Archive"
+  #       run: "cd build/linux && zip -r ../../releases/taku.server.linux.zip ./"
+  #     - name: "Compress Linux MacOS"
+  #       run: "cd build/macos && zip -r ../../releases/taku.server.macos.zip ./"
+  #     - name: "Compress Windows Archive"
+  #       run: "cd build/windows && zip -r ../../releases/taku.server.win.zip ./"
 
-      # Create dest folder for saving archives
-      - name: "Create Destination Folder"
-        run: "mkdir releases"
+  #     # Upload them all as an artifact
+  #     - name: "Upload Release Builds"
+  #       uses: actions/upload-artifact@v2
+  #       with:
+  #         name: Taku Server Builds
+  #         path: releases
 
-      # Compress each folder
-      - name: "Compress Linux Archive"
-        run: "cd build/linux && zip -r ../../releases/taku.server.linux.zip ./"
-      - name: "Compress Linux MacOS"
-        run: "cd build/macos && zip -r ../../releases/taku.server.macos.zip ./"
-      - name: "Compress Windows Archive"
-        run: "cd build/windows && zip -r ../../releases/taku.server.win.zip ./"
-
-      # Upload them all as an artifact
-      - name: "Upload Release Builds"
-        uses: actions/upload-artifact@v2
-        with:
-          name: Taku Server Builds
-          path: releases
-
-  # Publish the compiled files to Github's releases
-  release:
-      name: "Release Build"
-      runs-on: ubuntu-latest
-      needs: package
-      steps:
+  # # Publish the compiled files to Github's releases
+  # release:
+  #     name: "Release Build"
+  #     runs-on: ubuntu-latest
+  #     needs: package
+  #     steps:
         
-        # Yes we get the repo again but only for the version in the package.json
-        - name: Checkout
-          uses: actions/checkout@v2
-        - name: Set Version Variable
-          run: echo "::set-output name=version::$(node -pe 'require(`./package.json`).version')"
-          id: version
+  #       # Yes we get the repo again but only for the version in the package.json
+  #       - name: Checkout
+  #         uses: actions/checkout@v2
+  #       - name: Set Version Variable
+  #         run: echo "::set-output name=version::$(node -pe 'require(`./package.json`).version')"
+  #         id: version
 
-        # Download the artifacts
-        - name: Download Binaries
-          uses: actions/download-artifact@v2
-          with:
-            name: Taku Server Builds
-            path: releases
+  #       # Download the artifacts
+  #       - name: Download Binaries
+  #         uses: actions/download-artifact@v2
+  #         with:
+  #           name: Taku Server Builds
+  #           path: releases
 
-        # The release script that prepares a new Github release
-        - name: Create Release
-          uses: actions/create-release@v1
-          id: create_release
-          continue-on-error: true
-          with:
-            draft: false
-            prerelease: false
-            release_name: ${{ steps.version.outputs.version }}
-            tag_name: ${{ steps.version.outputs.version }}
-          env:
-            GITHUB_TOKEN: ${{ github.token }}
+  #       # The release script that prepares a new Github release
+  #       - name: Create Release
+  #         uses: actions/create-release@v1
+  #         id: create_release
+  #         continue-on-error: true
+  #         with:
+  #           draft: false
+  #           prerelease: false
+  #           release_name: ${{ steps.version.outputs.version }}
+  #           tag_name: ${{ steps.version.outputs.version }}
+  #         env:
+  #           GITHUB_TOKEN: ${{ github.token }}
 
-        # Upload artifacts to the release
-        - name: Upload Linux Artifact
-          uses: actions/upload-release-asset@v1
-          continue-on-error: true
-          env:
-            GITHUB_TOKEN: ${{ github.token }}
-          with:
-            upload_url: ${{ steps.create_release.outputs.upload_url }}
-            asset_path: ./releases/taku.server.linux.zip
-            asset_name: taku.server.linux.v${{ steps.version.outputs.version }}.zip
-            asset_content_type: application/zip
-        - name: Upload MacOS Artifact
-          uses: actions/upload-release-asset@v1
-          continue-on-error: true
-          env:
-            GITHUB_TOKEN: ${{ github.token }}
-          with:
-            upload_url: ${{ steps.create_release.outputs.upload_url }}
-            asset_path: ./releases/taku.server.macos.zip
-            asset_name: taku.server.macos.v${{ steps.version.outputs.version }}.zip
-            asset_content_type: application/zip
-        - name: Upload Windows Artifact
-          uses: actions/upload-release-asset@v1
-          continue-on-error: true
-          env:
-            GITHUB_TOKEN: ${{ github.token }}
-          with:
-            upload_url: ${{ steps.create_release.outputs.upload_url }}
-            asset_path: ./releases/taku.server.win.zip
-            asset_name: taku.server.win.v${{ steps.version.outputs.version }}.zip
-            asset_content_type: application/zip
+  #       # Upload artifacts to the release
+  #       - name: Upload Linux Artifact
+  #         uses: actions/upload-release-asset@v1
+  #         continue-on-error: true
+  #         env:
+  #           GITHUB_TOKEN: ${{ github.token }}
+  #         with:
+  #           upload_url: ${{ steps.create_release.outputs.upload_url }}
+  #           asset_path: ./releases/taku.server.linux.zip
+  #           asset_name: taku.server.linux.v${{ steps.version.outputs.version }}.zip
+  #           asset_content_type: application/zip
+  #       - name: Upload MacOS Artifact
+  #         uses: actions/upload-release-asset@v1
+  #         continue-on-error: true
+  #         env:
+  #           GITHUB_TOKEN: ${{ github.token }}
+  #         with:
+  #           upload_url: ${{ steps.create_release.outputs.upload_url }}
+  #           asset_path: ./releases/taku.server.macos.zip
+  #           asset_name: taku.server.macos.v${{ steps.version.outputs.version }}.zip
+  #           asset_content_type: application/zip
+  #       - name: Upload Windows Artifact
+  #         uses: actions/upload-release-asset@v1
+  #         continue-on-error: true
+  #         env:
+  #           GITHUB_TOKEN: ${{ github.token }}
+  #         with:
+  #           upload_url: ${{ steps.create_release.outputs.upload_url }}
+  #           asset_path: ./releases/taku.server.win.zip
+  #           asset_name: taku.server.win.v${{ steps.version.outputs.version }}.zip
+  #           asset_content_type: application/zip
