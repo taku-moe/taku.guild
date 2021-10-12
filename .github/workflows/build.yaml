@@ -26,10 +26,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: "Install libvips"
-        run: "sudo apt update -y && sudo apt install -y libvips"
       - name: Install NPM dependancies
-        run: "npm i --platform linux"
+        run: "npm i"
       - name: Download compiled JS
         uses: actions/download-artifact@v2
         with:
@@ -53,10 +51,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: "Install libvips"
-        run: "sudo apt update -y && sudo apt install -y libvips"
       - name: Install NPM dependancies
-        run: "npm i --platform darwin"
+        run: "npm i"
       - name: Download compiled JS
         uses: actions/download-artifact@v2
         with:
@@ -80,10 +76,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: "Install libvips"
-        run: "sudo apt update -y && sudo apt install -y libvips"
       - name: Install NPM dependancies
-        run: "npm i --platform win32"
+        run: "npm i"
       - name: Download compiled JS
         uses: actions/download-artifact@v2
         with:
