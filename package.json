@@ -8,6 +8,7 @@
     "prod": "nodemon ./src/index.ts",
     "prettify": "npx prettier --write \"./**/*.ts\" && npx prettier --write \"./**/*.json\"",
     "build": "tsc && npm run compile-linux && npm run compile-macos && npm run compile-win",
+    "copy-libraries": "cp ./node_modules/sharp/build/Release ./build/sharp/build/Release && cp ./node_modules/sharp/vendor/lib ./build/sharp/vendor/lib",
     "compile-linux": "pkg -t \"node14-linux-x64\" ./dist/index.js -o \"./build/taku.server.linux.${npm_package_version}.bin\" --compress Brotli",
     "compile-macos": "pkg -t \"node14-macos-x64\" ./dist/index.js -o \"./build/taku.server.macos.${npm_package_version}\" --compress Brotli",
     "compile-win": "pkg -t \"node14-win-x64\" ./dist/index.js -o \"./build/taku.server.win.${npm_package_version}\" --compress Brotli"
@@ -36,6 +37,7 @@
     "@types/jsonwebtoken": "^8.5.5",
     "@types/morgan": "^1.9.3",
     "@types/multer": "^1.4.7",
+    "@types/sharp": "^0.29.2",
     "@types/uuid": "^8.3.1",
     "pkg": "^5.3.3",
     "ts-node": "^10.2.1",
@@ -45,12 +47,12 @@
     "axios": "^0.22.0",
     "express": "^4.17.1",
     "file-type": "^16.5.3",
-    "jimp": "^0.16.1",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.0.10",
     "morgan": "^1.10.0",
     "multer": "^1.4.3",
     "node-fetch": "^3.0.0",
+    "sharp": "^0.29.1",
     "socket.io": "^4.2.0",
     "uuid": "^8.3.2"
   }

@@ -27,7 +27,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Install dependancies
-        run: "npm i"
+        run: "npm i --platform linux"
       - name: Download compiled JS
         uses: actions/download-artifact@v2
         with:
@@ -35,11 +35,15 @@ jobs:
           path: dist
       - name: "Compile for Linux"
         run: "npm run compile-linux"
+      - name: "Include Libraries"
+        run: "npm run cope-libraries"
       - name: Upload Compiled Binary
         uses: actions/upload-artifact@v2
         with:
           name: taku.server.linux
           path: build
+      
+
   compile_macos:
     name: "Compile for MacOS"
     runs-on: ubuntu-latest
@@ -48,7 +52,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Install dependancies
-        run: "npm i"
+        run: "npm i --platform darwin"
       - name: Download compiled JS
         uses: actions/download-artifact@v2
         with:
@@ -56,11 +60,15 @@ jobs:
           path: dist
       - name: "Compile for MacOS"
         run: "npm run compile-macos"
+      - name: "Include Libraries"
+        run: "npm run cope-libraries"
       - name: Upload Compiled Binary
         uses: actions/upload-artifact@v2
         with:
           name: taku.server.macos
           path: build
+      
+
   compile_win:
     name: "Compile for Windows"
     runs-on: ubuntu-latest
@@ -69,7 +77,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Install dependancies
-        run: "npm i"
+        run: "npm i --platform win64"
       - name: Download compiled JS
         uses: actions/download-artifact@v2
         with:
@@ -77,11 +85,14 @@ jobs:
           path: dist
       - name: "Compile for Windows"
         run: "npm run compile-win"
+      - name: "Include Libraries"
+        run: "npm run cope-libraries"
       - name: Upload Compiled Binary
         uses: actions/upload-artifact@v2
         with:
           name: taku.server.win
           path: build
+      
 
   test_win:
     name: "Test Windows Build"
