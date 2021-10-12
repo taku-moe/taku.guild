@@ -1,7 +1,7 @@
 import express from "express";
 import fs from "fs";
+import sharp from "sharp"
 import mimeType from "file-type";
-const sharp = process.env.PROD ? require(process.cwd() + "/sharp") : require("sharp");
 
 const SUPPORTED_IMAGE_MIMES = ["image/png", "image/png", "image/jpeg", "image/tiff", "image/avif", "image/webp", "image/gif"];
 
