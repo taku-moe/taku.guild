@@ -8,7 +8,7 @@
     "moduleResolution": "node",
     "outDir": "dist",
     "removeComments": true,
-    "sourceMap": false,
+    "sourceMap": true,
     "declaration": false,
     "module": "commonjs",
     "forceConsistentCasingInFileNames": true
