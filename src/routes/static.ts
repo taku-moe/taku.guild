@@ -3,7 +3,7 @@ import fs from "fs";
 import sharp from "sharp"
 import mimeType from "file-type";
 
-const SUPPORTED_IMAGE_MIMES = ["image/png", "image/png", "image/jpeg", "image/tiff", "image/avif", "image/webp", "image/gif"];
+const SUPPORTED_IMAGE_MIMES = ["image/png", "image/png", "image/jpeg", "image/tiff", "image/avif", "image/webp" ];
 
 const router = express.Router();
 
