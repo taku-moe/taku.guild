@@ -35,8 +35,8 @@ jobs:
           path: dist
       - name: "Compile for Linux"
         run: "npm run compile-linux"
-      - name: "Include Libraries"
-        run: "npm run cope-libraries"
+      - name: "Include Sharp Binaries"
+        run: "cp ./node_modules/sharp/build/Release ./build/sharp/build/Release && cp ./node_modules/sharp/vendor/lib ./build/sharp/vendor/lib"
       - name: Upload Compiled Binary
         uses: actions/upload-artifact@v2
         with:
@@ -60,8 +60,8 @@ jobs:
           path: dist
       - name: "Compile for MacOS"
         run: "npm run compile-macos"
-      - name: "Include Libraries"
-        run: "npm run cope-libraries"
+      - name: "Include Sharp Binaries"
+        run: "cp ./node_modules/sharp/build/Release ./build/sharp/build/Release && cp ./node_modules/sharp/vendor/lib ./build/sharp/vendor/lib"
       - name: Upload Compiled Binary
         uses: actions/upload-artifact@v2
         with:
@@ -85,8 +85,8 @@ jobs:
           path: dist
       - name: "Compile for Windows"
         run: "npm run compile-win"
-      - name: "Include Libraries"
-        run: "npm run cope-libraries"
+      - name: "Include Sharp Binaries"
+        run: "cp ./node_modules/sharp/build/Release ./build/sharp/build/Release && cp ./node_modules/sharp/vendor/lib ./build/sharp/vendor/lib"
       - name: Upload Compiled Binary
         uses: actions/upload-artifact@v2
         with:
