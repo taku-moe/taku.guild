@@ -27,7 +27,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Install dependancies
-        run: "npm i --platform linux"
+        run: "npm i --platform linux --arch=x64"
       - name: Download compiled JS
         uses: actions/download-artifact@v2
         with:
@@ -52,7 +52,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Install dependancies
-        run: "npm i --platform darwin"
+        run: "npm i --platform darwin --arch=x64"
       - name: Download compiled JS
         uses: actions/download-artifact@v2
         with:
@@ -77,7 +77,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Install dependancies
-        run: "npm i --platform win32"
+        run: "npm i --platform win32 --arch=x64"
       - name: Download compiled JS
         uses: actions/download-artifact@v2
         with:
