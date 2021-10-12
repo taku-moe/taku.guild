@@ -36,7 +36,10 @@ jobs:
       - name: "Compile for Linux"
         run: "npm run compile-linux"
       - name: "Include Sharp Binaries"
-        run: "cp -r ./node_modules/sharp/build/Release ./build/sharp/build/Release && cp ./node_modules/sharp/vendor/lib ./build/sharp/vendor/lib"
+        run: "mkdir -p ./build/sharp/build/Release && |
+        cp -r ./node_modules/sharp/build/Release ./build/sharp/build/Release && |
+        mkdir -p ./build/sharp/vendor/lib && |
+        cp ./node_modules/sharp/vendor/lib ./build/sharp/vendor/lib"
       - name: Upload Compiled Binary
         uses: actions/upload-artifact@v2
         with:
@@ -61,7 +64,10 @@ jobs:
       - name: "Compile for MacOS"
         run: "npm run compile-macos"
       - name: "Include Sharp Binaries"
-        run: "cp -r ./node_modules/sharp/build/Release ./build/sharp/build/Release && cp ./node_modules/sharp/vendor/lib ./build/sharp/vendor/lib"
+        run: "mkdir -p ./build/sharp/build/Release && |
+        cp -r ./node_modules/sharp/build/Release ./build/sharp/build/Release && |
+        mkdir -p ./build/sharp/vendor/lib && |
+        cp ./node_modules/sharp/vendor/lib ./build/sharp/vendor/lib"
       - name: Upload Compiled Binary
         uses: actions/upload-artifact@v2
         with:
@@ -86,7 +92,10 @@ jobs:
       - name: "Compile for Windows"
         run: "npm run compile-win"
       - name: "Include Sharp Binaries"
-        run: "cp -r ./node_modules/sharp/build/Release ./build/sharp/build/Release && cp ./node_modules/sharp/vendor/lib ./build/sharp/vendor/lib"
+        run: "mkdir -p ./build/sharp/build/Release && |
+        cp -r ./node_modules/sharp/build/Release ./build/sharp/build/Release && |
+        mkdir -p ./build/sharp/vendor/lib && |
+        cp ./node_modules/sharp/vendor/lib ./build/sharp/vendor/lib"
       - name: Upload Compiled Binary
         uses: actions/upload-artifact@v2
         with:
