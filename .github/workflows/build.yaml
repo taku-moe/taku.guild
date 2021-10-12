@@ -131,11 +131,10 @@ jobs:
         with:
           name: taku.server.macos
           path: build
-
       - name: "Make runnable"
-        run: "chmod +x ./build/*"
+        run: "chmod +x ./build/taku.server.*"
       - name: "Run Binary"
-        run: "sudo ./build/*"
+        run: "sudo ./build/taku.server.*"
 
   package:
     name: "Package up Archives"
