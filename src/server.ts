@@ -7,6 +7,7 @@ import cors from "cors";
 import io from "socket.io";
 import chalk from "chalk";
 import axios from "axios";
+import sharp from "sharp"
 import jwt from "jsonwebtoken";
 import fs from "fs";
 import { Member } from "./models/Member";
@@ -104,14 +105,22 @@ class Server {
       const avatarPNG = process.cwd() + "/avatar.png";
       const avatarGIF = process.cwd() + "/avatar.gif";
       if (fs.existsSync(avatarGIF)) return res.status(200).sendFile(avatarGIF);
-      if (fs.existsSync(avatarPNG)) return res.status(200).sendFile(avatarPNG);
-      res.status(404).send();
+      if (fs.existsSync(avatarPNG)) {
+        const image = sharp(avatarPNG);
+        const buffer = await image.resize({width: 64}).webp().toBuffer()
+        return res.writeHead(200, [["Content-Type", 'image/webp']]).end(buffer);
+      }
+      return res.status(404).send();
     });
     this.express.get("/banner", async (req, res) => {
       const bannerPNG = process.cwd() + "/banner.png";
       const bannerGIF = process.cwd() + "/banner.gif";
       if (fs.existsSync(bannerGIF)) return res.status(200).sendFile(bannerGIF);
-      if (fs.existsSync(bannerPNG)) return res.status(200).sendFile(bannerPNG);
+      if (fs.existsSync(bannerPNG)) {
+        const image = sharp(bannerPNG);
+        const buffer = await image.resize({height: 720}).webp().toBuffer()
+        return res.writeHead(200, [["Content-Type", 'image/webp']]).end(buffer);
+      };
       res.status(404).send();
     });
   }
