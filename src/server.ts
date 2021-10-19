@@ -15,6 +15,7 @@ import { v4 as uuidv4 } from "uuid";
 import { V1 } from "./routes";
 import { Message } from "./models/Message";
 import { staticRouter } from "./routes/static";
+import { Auri, auri } from "./auri";
 /**
  * The main server class that does all the shit you know?
  * @author N1kO23
@@ -23,6 +24,7 @@ import { staticRouter } from "./routes/static";
  * @author Cimok
  */
 class Server {
+  public stats: Auri = auri;
   public express: Express;
   public server: http.Server;
   public io: io.Server;
@@ -47,7 +49,10 @@ class Server {
         socket.disconnect();
       }
 
-      socket.on("pong", (pong) => socket.emit("ping", pong));
+      socket.on("pong", (pong) => {
+        const {cpu, ram, network} = this.stats.dataAll;
+        socket.emit("ping", {pong, cpu, ram, network});
+      });
 
       socket.on("message", async (data) => {
         if (!data.channel_id) return;
