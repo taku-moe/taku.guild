@@ -43,19 +43,18 @@ export class Auri {
   };
 
   constructor() {
-    const files = fs.readdirSync("./bin");
-    for (const file of files) {
-      if (file.startsWith("auri")) {
-        // Start the process
-        this.process = spawn(`./bin/${file}`, {
-          windowsHide: true,
-        });
+    if (process.platform == 'win32'){
+      const files = fs.readdirSync("./bin");
+      for (const file of files) {
+        if (file.startsWith("auri")) {
+          // Start the process
+          this.process = spawn(`./bin/${file}`, {
+            windowsHide: true,
+          });
+        }
       }
     }
 
-    // Prepare an empty object to buffer the stuff in
-
-    // Parse data coming from Auri
     this.process?.stdout.on("data", (data) => (this.data = this.parseAuriData(data)));
   }
 
