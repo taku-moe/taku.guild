@@ -15,11 +15,12 @@ router.put("/member/:uuid", async (req, res) => {
 });
 
 router.put("/channel", async (req, res) => {
-  const { type, name } = req.body;
+  const { type, name, description } = req.body;
   const channel = new Channel({
     _id: uuidv4(),
     name: name.trim(),
     type: type.trim(),
+    description: description.trim(),
   });
   await channel.save();
   return res.status(201).json(channel);
