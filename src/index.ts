@@ -14,6 +14,7 @@ console.log(
 console.log(chalk.hex("333333")("Welcome to hell \n"));
 
 !fs.existsSync("./uploads/attachments") && fs.mkdirSync("./uploads/attachments", { recursive: true });
+!fs.existsSync("./uploads/explorer") && fs.mkdirSync("./uploads/explorer", { recursive: true });
 
 import "./settings";
 import "./server";

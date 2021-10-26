@@ -6,6 +6,7 @@ interface ISettings {
   ip: string | null;
   hostname: string | undefined;
   use_internal_db: boolean;
+  explorer_directory: string | null;
   database_url: string | null;
   is_whitelisted: boolean;
   auth_key: string | undefined;
@@ -23,17 +24,19 @@ class Settings implements ISettings {
   public ip: string | null;
   public use_internal_db: boolean;
   public database_url: string;
+  public explorer_directory: string;
   public is_whitelisted: boolean;
   public auth_key: string | undefined;
   public hostname: string | undefined;
 
   constructor() {
     !fs.existsSync("./settings.json") && this.save();
-    const { port, use_internal_db, ip, is_whitelisted, database_url, auth_key, hostname } = JSON.parse(
+    const { port, use_internal_db, ip, explorer_directory, is_whitelisted, database_url, auth_key, hostname } = JSON.parse(
       fs.readFileSync("./settings.json", { encoding: "utf-8" })
     ) as ISettings;
     this.ip = !!ip ? ip : "";
     this.database_url = database_url ?? "mongodb://localhost:27017/taku";
+    this.explorer_directory = explorer_directory ?? "./uploads/explorer";
     this.port = port ?? 9669;
     this.hostname = hostname ?? "localhost:9669";
     this.is_whitelisted = is_whitelisted ?? false;
