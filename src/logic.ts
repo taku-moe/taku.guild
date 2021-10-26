@@ -68,7 +68,7 @@ export const fetchFileStats = async (targetPath: string): Promise<File> => {
   };
 
   if (!file.is_directory){
-    file.download_link = `${settings.hostname}/v1/download${targetPath.substr(settings.explorer_directory.length)}`;
+    file.download_link = `${settings.hostname}/v1/download/${targetPath.substr(settings.explorer_directory.length)}`;
   }
 
   return file;
