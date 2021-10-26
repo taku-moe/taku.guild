@@ -32,7 +32,7 @@
   },
   "homepage": "https://github.com/taku-moe/taku.server#readme",
   "devDependencies": {
-    "@taku.moe/types": "^1.0.6",
+    "@taku.moe/types": "^1.0.7",
     "@types/express": "^4.17.13",
     "@types/jsonwebtoken": "^8.5.5",
     "@types/morgan": "^1.9.3",

@@ -174,6 +174,7 @@ class Server {
       data: {
         key: settings.auth_key,
         hostname: settings.hostname,
+        enable_explorer: settings.enable_explorer,
       },
     });
   }

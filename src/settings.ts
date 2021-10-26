@@ -9,6 +9,7 @@ interface ISettings {
   explorer_directory: string | null;
   database_url: string | null;
   is_whitelisted: boolean;
+  enable_explorer: boolean;
   auth_key: string | undefined;
 }
 
@@ -26,12 +27,13 @@ class Settings implements ISettings {
   public database_url: string;
   public explorer_directory: string;
   public is_whitelisted: boolean;
+  public enable_explorer: boolean = true;
   public auth_key: string | undefined;
   public hostname: string | undefined;
 
   constructor() {
     !fs.existsSync("./settings.json") && this.save();
-    const { port, use_internal_db, ip, explorer_directory, is_whitelisted, database_url, auth_key, hostname } = JSON.parse(
+    const { port, use_internal_db, ip, explorer_directory, enable_explorer, is_whitelisted, database_url, auth_key, hostname } = JSON.parse(
       fs.readFileSync("./settings.json", { encoding: "utf-8" })
     ) as ISettings;
     this.ip = !!ip ? ip : "";
@@ -40,6 +42,7 @@ class Settings implements ISettings {
     this.port = port ?? 9669;
     this.hostname = hostname ?? "http://127.0.0.1:9669";
     this.is_whitelisted = is_whitelisted ?? false;
+    this.enable_explorer = enable_explorer ?? true;
     this.use_internal_db = use_internal_db ?? true;
     this.auth_key = !!auth_key ? auth_key : "";
 

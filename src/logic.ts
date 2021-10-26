@@ -110,11 +110,16 @@ export const createDirectoriesIfNotExist = async (directoryPath: string) => {
  * Ensures that the user is not trying to escape root
  */
 export const safeJoin = (...paths: string[]): string => {
-  const out = path.join(settings.explorer_directory, ...paths);
-  if (out.indexOf(path.normalize(settings.explorer_directory)) !== 0) {
+  try {
+    const out = path.join(settings.explorer_directory, ...paths);
+    if (out.indexOf(path.normalize(settings.explorer_directory)) !== 0) {
+      return "";
+    }
+    return out;
+  } catch (error) {
     return "";
+    
   }
-  return out;
 };
 
 /**
