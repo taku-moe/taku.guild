@@ -1,6 +1,4 @@
 import mongoose, { Schema } from "mongoose";
-import { settings } from "../settings";
-mongoose.connect(settings.database_url);
 
 interface IMember {
   _id: string;

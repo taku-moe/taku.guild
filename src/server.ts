@@ -16,6 +16,8 @@ import { V1 } from "./routes";
 import { Message } from "./models/Message";
 import { staticRouter } from "./routes/static";
 import { Auri, auri } from "./auri";
+import mongoose from "mongoose";
+
 /**
  * The main server class that does all the shit you know?
  * @author N1kO23
@@ -32,11 +34,14 @@ class Server {
   private token: string | undefined;
   private uuid: string | undefined;
   constructor() {
+    console.log(`connecting to mongo ${settings.database_url}`);
+    mongoose.connect(settings.database_url).then(() => console.log('connected to mongo'));
     this.express = express();
     this.registerExpressRoutes();
     this.server = http.createServer(this.express);
     this.io = new io.Server(this.server, { cors: { origin: "*" } });
     this.io.on("connection", async (socket) => {
+
       console.log("new connection");
       if (!this.token || !socket.handshake.auth) return;
       let userUUID = "";
