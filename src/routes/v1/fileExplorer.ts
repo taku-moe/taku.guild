@@ -13,7 +13,7 @@ const router = express.Router();
 
 router.post("/ls", async (req: IRequest<IListDirectoryRequest>, res: IResponse<IListDirectoryResponse>) => {
   fetchDirectoryStats(safeJoin(req.body.path))
-    .then(files => res.status(200).json({ files }))
+    .then(files => res.status(200).send(files))
     .catch(() => res.status(404).send({code: 'dir.notFoundException'}));
 });
 
