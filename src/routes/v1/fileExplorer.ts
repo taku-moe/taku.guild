@@ -26,7 +26,7 @@ router.delete("/rm", async (req: IRequest<IDeleteRequest>, res: IResponse<{}>)=>
 router.put("/mkdir", async (req: IRequest<ICreateDirectoryRequest>, res: IResponse<{}>) => {
   const target = safeJoin(req.body.path);
   createDirectoriesIfNotExist(target)
-    .then(async () => res.status(200).send(await fetchFileStats(target)))
+    .then(async () => res.status(200).send())
     .catch(error => res.status(404).send({code: 'directory.creationFailException', error}));
 });
 
