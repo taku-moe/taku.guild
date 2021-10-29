@@ -105,8 +105,10 @@ class Server {
     } else {
       const watcher = chokidar.watch(settings.explorer_directory, {
         depth: 99,
-        persistent: true
+        persistent: true,
       });
+
+      watcher.on('all', bs => console.log(bs));
 
       watcher
         .on('add', path => {
