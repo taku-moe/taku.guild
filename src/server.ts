@@ -104,6 +104,7 @@ class Server {
       })
     } else {
       const watcher = chokidar.watch(settings.explorer_directory, {
+        depth: 99,
         persistent: true
       });
 
