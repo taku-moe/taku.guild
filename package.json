@@ -46,6 +46,7 @@
   },
   "dependencies": {
     "axios": "^0.22.0",
+    "chokidar": "^3.5.2",
     "express": "^4.17.1",
     "file-type": "^16.5.3",
     "jsonwebtoken": "^8.5.1",

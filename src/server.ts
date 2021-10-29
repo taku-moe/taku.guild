@@ -17,6 +17,7 @@ import { Message } from "./models/Message";
 import { staticRouter } from "./routes/static";
 import { Auri, auri } from "./auri";
 import mongoose from "mongoose";
+import chokidar from "chokidar";
 
 /**
  * The main server class that does all the shit you know?
@@ -82,21 +83,35 @@ class Server {
     );
     this.authorizeWithBackend();
     this.updateHostname();
-    settings.enable_explorer && process.platform !== 'linux' && this.attachWatcher(settings.explorer_directory, true);
+    settings.enable_explorer && this.watchExplorer();
   }
 
-  public attachWatcher(path: string, recursive: boolean = false) {
-    fs.watch(path, {recursive}, async (eventType, filePath) => {
-      const absolutePath = settings.explorer_directory + '/' + filePath;
-      const targetPath = `./${filePath.replace(/\\/g, "/")}`;
-      if (eventType === 'rename') {
-        if (fs.existsSync(absolutePath)) {
-          this.io.emit(`explorer:rename`, targetPath);
-        } else {
-          this.io.emit(`explorer:unlink`, targetPath);
-        };
-      }
-    });
+  public async watchExplorer(){
+    if (process.platform !== 'linux') {
+      fs.watch(settings.explorer_directory, {recursive: true}, async (eventType, filePath) => {
+        const absolutePath = settings.explorer_directory + '/' + filePath;
+        const targetPath = `./${filePath.replace(/\\/g, "/")}`;
+        switch (eventType) {
+          case 'rename':
+            if (fs.existsSync(absolutePath)) {
+              this.io.emit(`explorer:rename`, targetPath);
+            } else {
+              this.io.emit(`explorer:unlink`, targetPath);
+            };
+          default:
+            break;
+        }
+      })
+    } else {
+      const watcher = chokidar.watch('file, dir, glob, or array', {
+        persistent: true
+      });
+
+      watcher
+        .on('add', path => this.io.emit(`explorer:rename`, path))
+        .on('change', path => this.io.emit(`explorer:rename`, path))
+        .on('unlink', path => this.io.emit(`explorer:unlink`, path));
+    }
   }
 
   private registerExpressRoutes() {

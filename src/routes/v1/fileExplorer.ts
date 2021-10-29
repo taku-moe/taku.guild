@@ -5,7 +5,6 @@ import { ICreateDirectoryRequest, IDeleteRequest, IListDirectoryRequest, IListDi
 import { File } from "@taku.moe/types";
 import { settings } from "../../settings";
 import { upload } from "../../middleware/explorerUpload";
-import {server} from "../../server";
 
 type IRequest<T = any, P = any> = Request<P, {}, T>;
 type IResponse<T = any> = Response<T | {code: string, error?: any}>;
@@ -13,15 +12,8 @@ type IResponse<T = any> = Response<T | {code: string, error?: any}>;
 const router = express.Router();
 
 router.post("/ls", async (req: IRequest<IListDirectoryRequest>, res: IResponse<IListDirectoryResponse>) => {
-  const path = safeJoin(req.body.path);
-  fetchDirectoryStats(path)
-    .then(files => {
-      if (process.platform === 'linux') {
-        server.attachWatcher(path)
-        console.log('attached watcher for', path);
-      }
-      res.status(200).send(files)
-    })
+  fetchDirectoryStats(safeJoin(req.body.path))
+    .then(files => res.status(200).send(files))
     .catch(() => res.status(404).send({code: 'dir.notFoundException'}));
 });
 
