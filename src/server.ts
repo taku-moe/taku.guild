@@ -110,9 +110,11 @@ class Server {
         persistent: true,
       });
 
-      watcher.on('all', bs => console.log(bs));
-
       watcher
+        .on('addDir', path => {
+          console.log(`explorer:rename`, path);
+          this.io.emit(`explorer:rename`, path);
+        })
         .on('add', path => {
           console.log(`explorer:rename`, path);
           this.io.emit(`explorer:rename`, path);
