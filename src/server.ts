@@ -90,6 +90,13 @@ class Server {
     return "." + path.replace(settings.explorer_directory, "");
   }
 
+  private linuxWatcherHandler(path: string, eventName: string) {
+    const wsEvent = `explorer:${eventName}`;
+    const targetPath = this.parseLinuxDir(path);
+    console.log(wsEvent, targetPath);
+    this.io.emit(wsEvent, targetPath);
+  }
+
   public async watchExplorer(){
     if (process.platform !== 'linux') {
       fs.watch(settings.explorer_directory, {recursive: true}, async (eventType, filePath) => {
@@ -115,22 +122,10 @@ class Server {
       });
 
       watcher
-        .on('addDir', path => {
-          console.log(`explorer:rename`, this.parseLinuxDir(path));
-          this.io.emit(`explorer:rename`, this.parseLinuxDir(path));
-        })
-        .on('add', path => {
-          console.log(`explorer:rename`, this.parseLinuxDir(path));
-          this.io.emit(`explorer:rename`, this.parseLinuxDir(path));
-        })
-        .on('change', path => {
-          console.log(`explorer:rename`, this.parseLinuxDir(path));
-          this.io.emit(`explorer:rename`, this.parseLinuxDir(path));
-        })
-        .on('unlink', path => {
-          console.log(`explorer:unlink`, this.parseLinuxDir(path));
-          this.io.emit(`explorer:unlink`, this.parseLinuxDir(path));
-        });
+        .on('addDir', path => this.linuxWatcherHandler(path, 'rename'))
+        .on('add',    path => this.linuxWatcherHandler(path, 'rename'))
+        .on('change', path => this.linuxWatcherHandler(path, 'rename'))
+        .on('unlink', path => this.linuxWatcherHandler(path, 'unlink'));
     }
   }
 
