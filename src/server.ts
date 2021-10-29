@@ -109,9 +109,18 @@ class Server {
       });
 
       watcher
-        .on('add', path => this.io.emit(`explorer:rename`, path))
-        .on('change', path => this.io.emit(`explorer:rename`, path))
-        .on('unlink', path => this.io.emit(`explorer:unlink`, path));
+        .on('add', path => {
+          console.log(`explorer:rename`, path);
+          this.io.emit(`explorer:rename`, path);
+        })
+        .on('change', path => {
+          console.log(`explorer:rename`, path);
+          this.io.emit(`explorer:rename`, path);
+        })
+        .on('unlink', path => {
+          console.log(`explorer:unlink`, path);
+          this.io.emit(`explorer:unlink`, path);
+        });
     }
   }
 
