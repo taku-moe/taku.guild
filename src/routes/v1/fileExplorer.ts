@@ -12,8 +12,6 @@ type IResponse<T = any> = Response<T | {code: string, error?: any}>;
 const router = express.Router();
 
 router.post("/ls", async (req: IRequest<IListDirectoryRequest>, res: IResponse<IListDirectoryResponse>) => {
-  console.log(safeJoin(req.body.path));
-  
   fetchDirectoryStats(safeJoin(req.body.path))
     .then(files => res.status(200).send(files))
     .catch(() => res.status(404).send({code: 'dir.notFoundException'}));
