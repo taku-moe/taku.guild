@@ -87,7 +87,7 @@ class Server {
   }
 
   private parseLinuxDir(path: string) {
-    return "./" + path.replace(settings.explorer_directory, "");
+    return "." + path.replace(settings.explorer_directory, "");
   }
 
   public async watchExplorer(){
