@@ -63,19 +63,17 @@ export const fetchFileStats = async (targetPath: string): Promise<File> => {
   const stats = await stat(targetPath);
   const is_directory = stats.isDirectory();
   const file = {
-    filename: is_directory ? parsed.base : parsed.name,
-    size: is_directory ? await fetchDirSize(targetPath) : stats.size,
-    date_created: stats.birthtimeMs,
-    date_modified: stats.mtimeMs,
-    // TODO: Make this be the userID that uploaded this file
-    uploaded_by: undefined,
-    is_directory,
-    extension: is_directory ? "" : parsed.ext,
-    download_link: ""
+    n: is_directory ? parsed.base : parsed.name,
+    s: is_directory ? await fetchDirSize(targetPath) : stats.size,
+    dc: stats.birthtimeMs,
+    dm: stats.mtimeMs,
+    dir: is_directory,
+    e: is_directory ? "" : parsed.ext,
+    dl: ""
   };
 
-  if (!file.is_directory){
-    file.download_link = `${settings.hostname}/v1/download/${targetPath.substr(settings.explorer_directory.length)}`;
+  if (!is_directory){
+    file.dl = `${settings.hostname}/v1/download/${targetPath.substr(settings.explorer_directory.length)}`;
   }
 
   return file;
