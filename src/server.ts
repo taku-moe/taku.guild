@@ -103,7 +103,7 @@ class Server {
         }
       })
     } else {
-      const watcher = chokidar.watch('file, dir, glob, or array', {
+      const watcher = chokidar.watch(settings.explorer_directory, {
         persistent: true
       });
 
