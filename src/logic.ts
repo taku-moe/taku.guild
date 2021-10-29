@@ -48,11 +48,11 @@ export const recursiveDelete = async (targetPath: string) => {
   fs.rmdirSync(targetPath);
 };
 
-const dirSize = async (directory: string) => {
+const fetchDirSize = async (directory: string) => {
   const files = await readdir( directory );
   const stats = files.map( file => stat( path.join( directory, file ) ) );
 
-  return ( await Promise.all( stats ) ).reduce( ( accumulator, { size } ) => accumulator + size, 0 );
+  return (await Promise.all(stats)).reduce((a, { size } ) => a + size, 0);
 }
 
 /**
@@ -64,7 +64,7 @@ export const fetchFileStats = async (targetPath: string): Promise<File> => {
   const is_directory = stats.isDirectory();
   const file = {
     filename: is_directory ? parsed.base : parsed.name,
-    size: is_directory ? await dirSize(targetPath) : stats.size,
+    size: is_directory ? await fetchDirSize(targetPath) : stats.size,
     date_created: stats.birthtimeMs,
     date_modified: stats.mtimeMs,
     // TODO: Make this be the userID that uploaded this file
