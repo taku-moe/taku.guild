@@ -48,13 +48,6 @@ export const recursiveDelete = async (targetPath: string) => {
   fs.rmdirSync(targetPath);
 };
 
-const fetchDirSize = async (directory: string) => {
-  const files = await readdir( directory );
-  const stats = files.map( file => stat( path.join( directory, file ) ) );
-
-  return (await Promise.all(stats)).reduce((a, { size } ) => a + size, 0);
-}
-
 /**
  * Gets details for a file at a given path
  */
@@ -64,7 +57,7 @@ export const fetchFileStats = async (targetPath: string): Promise<File> => {
   const is_directory = stats.isDirectory();
   const file = {
     n: is_directory ? parsed.base : parsed.name,
-    s: is_directory ? await fetchDirSize(targetPath) : stats.size,
+    s: is_directory ? '' : stats.size,
     dc: stats.birthtimeMs,
     dm: stats.mtimeMs,
     dir: is_directory,
