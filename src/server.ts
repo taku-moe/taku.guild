@@ -17,7 +17,6 @@ import { Message } from "./models/Message";
 import { staticRouter } from "./routes/static";
 import { Auri, auri } from "./auri";
 import mongoose from "mongoose";
-import { fetchFileStats } from "./logic";
 
 /**
  * The main server class that does all the shit you know?
@@ -83,24 +82,21 @@ class Server {
     );
     this.authorizeWithBackend();
     this.updateHostname();
-    settings.enable_explorer && this.watchExplorer();
+    settings.enable_explorer && process.platform !== 'linux' && this.attachWatcher(settings.explorer_directory, true);
   }
 
-  public async watchExplorer(){
-    fs.watch(settings.explorer_directory, {recursive: true}, async (eventType, filePath) => {
+  public attachWatcher(path: string, recursive: boolean = false) {
+    fs.watch(path, {recursive}, async (eventType, filePath) => {
       const absolutePath = settings.explorer_directory + '/' + filePath;
       const targetPath = `./${filePath.replace(/\\/g, "/")}`;
-      switch (eventType) {
-        case 'rename':
-          if (fs.existsSync(absolutePath)) {
-            this.io.emit(`explorer:rename`, targetPath);
-          } else {
-            this.io.emit(`explorer:unlink`, targetPath);
-          };
-        default:
-          break;
+      if (eventType === 'rename') {
+        if (fs.existsSync(absolutePath)) {
+          this.io.emit(`explorer:rename`, targetPath);
+        } else {
+          this.io.emit(`explorer:unlink`, targetPath);
+        };
       }
-    })
+    });
   }
 
   private registerExpressRoutes() {
