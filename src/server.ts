@@ -86,6 +86,10 @@ class Server {
     settings.enable_explorer && this.watchExplorer();
   }
 
+  private parseLinuxDir(path: string) {
+    return "." + path.replace(settings.explorer_directory, "");
+  }
+
   public async watchExplorer(){
     if (process.platform !== 'linux') {
       fs.watch(settings.explorer_directory, {recursive: true}, async (eventType, filePath) => {
@@ -112,20 +116,20 @@ class Server {
 
       watcher
         .on('addDir', path => {
-          console.log(`explorer:rename`, path);
-          this.io.emit(`explorer:rename`, path);
+          console.log(`explorer:rename`, this.parseLinuxDir(path));
+          this.io.emit(`explorer:rename`, this.parseLinuxDir(path));
         })
         .on('add', path => {
-          console.log(`explorer:rename`, path);
-          this.io.emit(`explorer:rename`, path);
+          console.log(`explorer:rename`, this.parseLinuxDir(path));
+          this.io.emit(`explorer:rename`, this.parseLinuxDir(path));
         })
         .on('change', path => {
-          console.log(`explorer:rename`, path);
-          this.io.emit(`explorer:rename`, path);
+          console.log(`explorer:rename`, this.parseLinuxDir(path));
+          this.io.emit(`explorer:rename`, this.parseLinuxDir(path));
         })
         .on('unlink', path => {
-          console.log(`explorer:unlink`, path);
-          this.io.emit(`explorer:unlink`, path);
+          console.log(`explorer:unlink`, this.parseLinuxDir(path));
+          this.io.emit(`explorer:unlink`, this.parseLinuxDir(path));
         });
     }
   }
